@@ -1,0 +1,13 @@
+.filterState{
+    display: none;
+}
+
+.speciesTitle{
+    margin: 0px;
+}
+.speciesSubtitle{
+    margin-top: 0.3em;
+    margin-bottom: 0.8em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px gray solid;
+}
