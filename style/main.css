@@ -11,3 +11,7 @@
     padding-bottom: 0.3em;
     border-bottom: 1px gray solid;
 }
+
+.hidden{
+    display: none;
+}

@@ -7,37 +7,38 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
        
-        <link rel="stylesheet" href="style/jquery.mobile-1.1.0.min.css" />
+        <link rel="stylesheet" href="js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
         
         <!-- Photoswipe CSS -->
         <link rel="stylesheet" href="style/photoswipe.css" type="text/css" >
         <link rel="stylesheet" href="style/photoswipe-jquery-mobile.css" type="text/css">
         
         <!-- Application CSS -- >
-        <link rel="stylesheet" href="style/main.css" /> 
+        <link rel="stylesheet" href="style/main.css" type="text/css" media="screen" charset="utf-8">
          
         <!-- JQuery Stuff -->
-        <script src="js/jquery-1.7.1.min.js" type="text/javascript"></script>
-        <script src="js/jquery.mobile-1.1.0.min.js" type="text/javascript"></script>
+        <script src="js/jquery-2.1.3.min.js" type="text/javascript" charset="utf-8"></script>        
+        <script src="js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js" type="text/javascript" charset="utf-8"></script>
         
         <!-- Photoswipe javascript -->
         <script src="js/klass.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/code.photoswipe.jquery-3.0.4.js" type="text/javascript" charset="utf-8"></script>
         
         <!-- Application javascript -->
+        <script src="data/data.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/main.js" type="text/javascript"></script>
-        
     
     </head> 
 <body> 
 
 
+<!--  H O M E - P A G E  -->
 <div data-role="page" id="index-page">
 
 	<div data-role="header">
-	    <a href="about.html" data-transition="slide" data-direction="reverse" data-icon="arrow-l" >About</a>
+	    <a href="#about-page?banana=99" data-transition="slide" data-direction="reverse" data-icon="arrow-l" >About</a>
 		<h1>Home Page</h1>
-		<a href="species.html" data-transition="slide" data-icon="arrow-r" data-iconpos="right" >Species</a>
+		<a href="#species-page" data-transition="slide" data-icon="arrow-r" data-iconpos="right" >Species</a>
 	</div><!-- /header -->
 
 	<div data-role="content">	
@@ -52,6 +53,147 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 	</div><!-- /content -->
 
 </div><!-- /page -->
+
+
+<!-- A B O U T - P A G E -->
+<div data-role="page" id="about-page">
+
+	<div data-role="header">
+		<h1>About</h1>
+		<a href="#index-page" class="ui-btn-right" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Home</a>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+	    <h2 id="about-page-subtitle">Not Set</h2>
+		<p>These are the credits about the software, how it works and where it comes from...</p>
+	</div><!-- /content -->
+
+</div><!-- /page -->
+
+
+<!-- S P E C I E S - L I S T - P A G E -->
+<div data-role="page" id="species-page">
+
+	<div data-role="header" >
+	    <a href="index.html" data-direction="reverse"  data-transition="slide" data-icon="arrow-l">Home</a>
+		<h1>Species</h1>
+		<a href="#filter-page" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Filter</a>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		<ul data-role="listview">
+		    <li>
+		        <a href="#profile-page?species=160" data-transition="slide">
+		            <h3>Ortolan Bunting</h3>
+		            <p>Emberiza hortulana</p>
+		            <span class="ui-li-count" id="species-score-160">score: 0</span>
+		        </a>
+		    </li>
+		    <li><a href="#profile-page?species=159" data-transition="slide"><h3>Eastern Cinereous Bunting</h3><p>Emberiza semenowi</p><span class="ui-li-count" id="species-score-159">score: 0</span></a>
+		    </li>
+		    <li>
+		        <a href="#profile-page?species=158" data-transition="slide">
+		            <h3>Grey-necked Bunting</h3>
+		            <p>Emberiza buchanani</p>
+		            <span class="ui-li-count" id="species-score-158">score: 0</span></a>
+		    </li>
+		    <li>
+		        <a href="#profile-page?species=157" data-transition="slide">
+		            <img src="images/thumbsquared/species/157/Photo_546cceba88d27.jpg" />
+		            <h3>Pine Bunting</h3>
+		            <p>Emberiza leucocephalus</p>
+		            <span class="ui-li-count" id="species-score-157">score: 0</span>
+		        </a>
+		    </li>
+		    <li>
+		        <a href="#profile-page?species=156" data-transition="slide">
+		            <img src="images/thumbsquared/species/156/Photo_546cccf2a5117.jpg" />
+		            <h3>Yellowhammer</h3>
+		            <p>Emberiza citronella</p>
+		            <span class="ui-li-count" id="species-score-156">score: 0</span>
+		        </a>
+		    </li>
+		    <li>
+		        <a href="#profile-page?species=155" data-transition="slide">
+		            <img src="images/thumbsquared/species/155/Photo_546ccc8f24a71.jpg" />
+		            <h3>Corn Bunting</h3>
+		            <p>Emberiza calandra</p>
+		            <span class="ui-li-count" id="species-score-155">score: 0</span>
+		        </a>
+		    </li>
+		</ul>
+		
+	</div><!-- /content -->
+</div><!-- /page -->
+
+<!--  P R O F I L E - P A G E  -->
+<div data-role="page" id="profile-page">
+
+	<div data-role="header">
+	    <a href="#species-page" data-icon="arrow-l" data-direction="reverse"  data-transition="slide">Species</a>
+		<h1>Species Profile</h1>
+		<a href="species_gallery_100.html" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Images</a>
+	</div><!-- /header -->
+
+	<div data-role="content">
+	     
+         <h2 class="profile-title">species-title</h2>
+         <p class="profile-subtitle">species-subtitle</p>
+         <div class="profile-notes" >profile-note</div>
+         
+         <ul data-role="listview" data-inset="true" id="profile-characters" ></ul>
+
+         <ul data-role="listview" data-inset="true" style="display:none;">
+             <li id="profile-character-group-template" data-role="list-divider">Group heading</li>
+             <li id="profile-character-template"><h3>Character Name</h3><p>States</p></li>
+        </ul>
+        
+	</div><!-- /content -->
+
+</div><!-- /page -->
+
+<!-- P R O F I L E - G A L L E R Y - P A G E -->
+<div data-role="page" id="species-gallery-100" class="gallery-page">
+
+	<div data-role="header" >
+	    <a href="#profile-page?100.html" data-direction="reverse"  data-transition="slide" data-icon="arrow-l">Back</a>
+		<h1>Images</h1>
+	</div><!-- /header -->
+	<div data-role="content">
+        <ul class="gallery">
+         <li><a href="images/pagesize/species/100/Photo_546b8cdf9c041.jpg" rel="external"><img src="images/thumbsquared/species/100/Photo_546b8cdf9c041.jpg" alt="Willow Warbler" /></a></li><li><a href="images/pagesize/species/100/Photo_546b8cdfa1eb3.jpg" rel="external"><img src="images/thumbsquared/species/100/Photo_546b8cdfa1eb3.jpg" alt="Willow Warbler" /></a></li><li><a href="images/pagesize/species/100/Photo_546b8cdfa3994.jpg" rel="external"><img src="images/thumbsquared/species/100/Photo_546b8cdfa3994.jpg" alt="Willow Warbler" /></a></li>         
+         </ul>
+    </div>
+</div><!-- /page -->
+
+
+<!--  F I L T E R - P A G E  -->
+<div data-role="page" id="filter-page">
+
+	<div data-role="header">
+	    <a href="#species-page" data-direction="reverse" data-transition="slide" data-icon="arrow-l" data-iconpos="left">Species</a>
+		<h1>Filter</h1>
+		<a href="" data-transition="slide" id="filter-clear-button" >Clear</a>
+	</div>
+
+	<div data-role="content">
+	    <div class="content-primary">
+
+<h2>Select as many identifying features as possible from the list below</h2>
+    <ul data-role="listview" data-inset="true">
+        <li><a href="score_33.html" data-transition="slide">Size</a><span class="ui-li-count"><span class="filterState" id="filterState-71">Big , </span><span class="filterState" id="filterState-72">Small, </span></span></li>
+        <li><a href="score_36.html" data-transition="slide">Shape</a><span class="ui-li-count"><span class="filterState" id="filterState-83">Sparrow, </span><span class="filterState" id="filterState-84">Dove, </span><span class="filterState" id="filterState-85">Chicken, </span><span class="filterState" id="filterState-86">Crow, </span><span class="filterState" id="filterState-87">Warbler, </span><span class="filterState" id="filterState-88">Blackbird, </span><span class="filterState" id="filterState-89">Heron, </span><span class="filterState" id="filterState-90">Bird of Prey, </span></span></li>
+        <li><a href="score_32.html" data-transition="slide">Bill shape</a><span class="ui-li-count"><span class="filterState" id="filterState-67">Fine, </span><span class="filterState" id="filterState-68">Stout, </span><span class="filterState" id="filterState-69">Long, </span><span class="filterState" id="filterState-70">Hooked, </span></span></li>
+        <li><a href="score_34.html" data-transition="slide">Habitat</a><span class="ui-li-count"><span class="filterState" id="filterState-74">Trees / Bushes, </span><span class="filterState" id="filterState-75">Sky / Soaring, </span><span class="filterState" id="filterState-76">Mountain / Cliffs, </span><span class="filterState" id="filterState-77">Rocks, </span><span class="filterState" id="filterState-78">Farmland, </span><span class="filterState" id="filterState-91">River / Stream , </span><span class="filterState" id="filterState-92">Village, </span></span></li>
+        <li><a href="score_35.html" data-transition="slide">Season</a><span class="ui-li-count"><span class="filterState" id="filterState-81">Winter, </span><span class="filterState" id="filterState-80">Spring, </span><span class="filterState" id="filterState-82">Summer, </span><span class="filterState" id="filterState-79">Autumn, </span></span></li>
+        <li><a href="score_31.html" data-transition="slide">What colours did you see?</a><span class="ui-li-count"><span class="filterState" id="filterState-58">Black, </span><span class="filterState" id="filterState-93">Green, </span><span class="filterState" id="filterState-59">White, </span><span class="filterState" id="filterState-60">Blue, </span><span class="filterState" id="filterState-61">Yellow, </span><span class="filterState" id="filterState-62">Red, </span><span class="filterState" id="filterState-63">Grey, </span><span class="filterState" id="filterState-64">Brown, </span><span class="filterState" id="filterState-65">Stripes / Bars, </span><span class="filterState" id="filterState-66">Spots, </span></span></li>
+    </ul>
+    
+        </div><!-- primary content -->
+    </div><!-- content -->
+</div><!-- /page -->
+
+
 
 <!-- start:footer.php -->
 </body>

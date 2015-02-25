@@ -1,6 +1,6 @@
 // config vars
 
-var statesCookieName = 'mobile_guide_states';
+var filtersCookieName = 'polyclave_filter_state';
 
 (function(window, $, PhotoSwipe){
     
@@ -36,58 +36,81 @@ var statesCookieName = 'mobile_guide_states';
 
 }(window, window.jQuery, window.Code.PhotoSwipe));
 
-
-
-   // this is run with every page loaded - may be cached though?
-    $(document).bind('pageinit', function(e, data) {
-        console.log("- pageinit -");
-        
-        // we need to clear the fiter 
-        $('#filter-clear-button').click(function(){
-             
-             var newArray = [];
-             setCookie(statesCookieName,newArray.join(),365);
-             document.location.reload();
-             
-         });
+// this is run with every page loaded - may be cached though?
+$(document).bind('pageinit', function(e, data) {
+    console.log("- pageinit -");
     
-    });
-    
-    // This is called when moving between pages first with the
-    // uri then with the fragment of dom that is about to be displayed.
-    $(document).bind( "pagebeforechange", function( e, data ) {
-
-        //console.log("- pagebeforechange -");
-        //console.log(data.toPage);
-        
-        if( typeof data.toPage !== "string"  ){
-            
-            // at this point the page has been loaded into the dom and we are
-            // about to switch it to visible - change it now if we need to!
-            console.log("about to show " + data.toPage.attr("id"));
-            var parts = data.toPage.attr("id").split('-');
-            var pageType =  parts[0];
+    // we need to clear the fiter 
+    $('#filter-clear-button').click(function(){
          
-            // switch statement to call the page update functions...
-            switch(pageType){
-                case 'score':
-                    initScorePage( data.toPage.attr("id") );
-                    break;
-                case 'filter':
-                    initFilterPage( data.toPage.attr("id") );
-                    break;
-                case 'species':
-                    initSpeciesListPage( data.toPage.attr("id") );
-                    break;
-                default:
-                    console.log("No init method for " + data.toPage.attr("id"));
-            }
-            
+         var newArray = [];
+         setCookie(filtersCookieName,newArray.join(),365);
+         document.location.reload();
+         
+     });
+
+});
+
+
+    
+// This is called when moving between pages first with the
+// uri then with the fragment of dom that is about to be displayed.
+$(document).bind( "pagecontainerbeforechange", function( e, data ) {
+
+
+    // When received with data.toPage set to a string, the event indicates that navigation is about to commence.
+    //The value stored in data.toPage is the URL of the page that will be loaded.
+    if( typeof data.toPage === "string" ){
+      
+      // urls are designed of the form #some-page?key1=value1&key2=value1
+      // the key/values are set as global values i.e. change the state of the app
+     var u = $.mobile.path.parseUrl( data.toPage );
+     if(u.hash){
+         var search_part = u.hash.substring(u.hash.indexOf('?') +1 );
+         var vars = search_part.split('&');
+         for (var i = 0; i < vars.length; i++) {
+             var pair = vars[i].split('=');
+             setCookie(decodeURIComponent(pair[0]),decodeURIComponent(pair[1]),365);
+         }
+     }
+     
+      
+    // When received with data.toPage set to a jQuery object, the event indicates that the destination page has been loaded and navigation will continue.
+    } else {
         
+        // at this point the page has been loaded into the dom and we are
+        // about to switch it to visible - change it now if we need to!
+        console.log("- pagebeforechange -");
+        console.log(data.toPage);
+        console.log("about to show " + data.toPage.attr("id"));
+     
+        // switch statement to call the page update functions...
+        switch(data.toPage.attr("id")){
+            case 'about-page':
+                initAboutPage();
+                break;
+            case 'profile-page':
+                initProfilePage();
+                break;
+            case 'score':
+                initScorePage( data.toPage.attr("id") );
+                break;
+            case 'filter':
+                initFilterPage( data.toPage.attr("id") );
+                break;
+            case 'species':
+                initSpeciesListPage( data.toPage.attr("id") );
+                break;
+
+            default:
+                console.log("No init method for " + data.toPage.attr("id"));
         }
         
-        
-    });
+    
+    }
+    
+    
+});
 
    // Called after the page has become visible.
     $(document).bind( "pagechange", function( e, data ) {
@@ -101,6 +124,90 @@ var statesCookieName = 'mobile_guide_states';
     });
 
 
+/* 
+    Init the about page - may not do anything
+*/
+function initAboutPage(){
+    console.log('initAboutPage');
+    $('#about-page-subtitle').html( polyclave_data.created );
+}
+
+function initProfilePage(){
+    console.log('initProfilePage: ' + getCookie('species'));
+    
+    
+    var species_id = getCookie('species');
+    var species = polyclave_data.species['s'+ species_id];
+    
+    // basic info about the species
+    // fixme - thumbnail here?
+    $('#profile-page .profile-title').html(species.title);
+    $('#profile-page .profile-subtitle').html(species.subtitle);
+    $('#profile-page .profile-notes').html(species.notes);
+    
+    // add in the characters
+    var char_list = $('#profile-characters');
+    
+    // if we haven't got the characters loaded - load them up
+    if(char_list.children().length == 0){
+        
+        // work through the groups
+        for(var i = 0; i < polyclave_data.character_tree.length; i++){
+        
+            var group = polyclave_data.character_tree[i];
+            
+            var list_header = $('#profile-character-group-template').clone();
+            list_header.html(group.title);
+            list_header.attr('id', 'profile-character-group-' + group.id);
+            char_list.append(list_header);
+            
+            // characters for this group
+            for(var j = 0; j < group.characters.length; j++){
+                
+                var character = group.characters[j];
+                
+                var li = $('#profile-character-template').clone();
+                li.find('h3').html(character.title);
+                li.attr('id', 'profile-character-' + character.id);
+                li.find('p').html('');
+                li.find('p').hide();
+                char_list.append(li);
+            }
+           
+        }    
+    }
+    
+    // character tree is now loaded so go through and add the scores for this species
+    for(var i = 0; i < polyclave_data.character_tree.length; i++){
+        var group = polyclave_data.character_tree[i];
+        for(var j = 0; j < group.characters.length; j++){
+            
+            var character = group.characters[j];
+            var lip = $('#profile-character-' + character.id + ' p');
+            
+            var count = 0;
+            for(var k = 0; k < character.states.length; k++){
+                var state = character.states[k];
+                
+                if($.inArray(state.id, species.scores) > -1){
+                    if(count > 0 ) lip.append('<span class="polyclave-state-spacer"> | </span>');
+                    lip.append('<span class="polyclave-state">' + state.title + '</span>');
+                    count++;
+                }
+            }
+            
+            if(count > 0) lip.show();
+            else lip.hide();
+            
+        } 
+    }
+    
+    char_list.listview('refresh');
+    
+    console.log(species);
+    
+}
+
     /*
         Init the score page so by popul
     */
@@ -111,10 +218,10 @@ var statesCookieName = 'mobile_guide_states';
         var inputSelector = "#" + pageId + " .stateCheck";
         
         // make sure we have a cookie of some kind for the states
-        if(getCookie(statesCookieName) == null){
-            setCookie(statesCookieName, '' , 365);
+        if(getCookie(filtersCookieName) == null){
+            setCookie(filtersCookieName, '' , 365);
         }else{
-            var currentStates = getCookie(statesCookieName).split(',');
+            var currentStates = getCookie(filtersCookieName).split(',');
         }
         
         console.log(currentStates);
@@ -138,14 +245,14 @@ var statesCookieName = 'mobile_guide_states';
         //listen to clicking and unclicking of checkboxes
         $(inputSelector).change(function(e){
             
-            var currentStates = getCookie(statesCookieName).split(',');
+            var currentStates = getCookie(filtersCookieName).split(',');
             var changedState = e.currentTarget.value
             
             if(e.currentTarget.checked){
                 
                 console.log("Add " + changedState); 
                 currentStates[currentStates.length] = e.currentTarget.value;
-                setCookie(statesCookieName,currentStates.join(),365);
+                setCookie(filtersCookieName,currentStates.join(),365);
                 
             }else{
                 console.log("Remove " + changedState);
@@ -153,7 +260,7 @@ var statesCookieName = 'mobile_guide_states';
                 for(var i = 0; i < currentStates.length; i++){
                     if(currentStates[i] != changedState) newArray[newArray.length] = currentStates[i];
                 }
-                setCookie(statesCookieName,newArray.join(),365);
+                setCookie(filtersCookieName,newArray.join(),365);
                 
             }
                        
@@ -164,10 +271,8 @@ var statesCookieName = 'mobile_guide_states';
     
     function initFilterPage( pageId ){
 
-        
-        
-        var statesCookieName = 'mobile_guide_states';
-        var currentStates = getCookie(statesCookieName).split(',');
+        var filtersCookieName = 'mobile_guide_states';
+        var currentStates = getCookie(filtersCookieName).split(',');
         
         console.log(currentStates);
         
@@ -196,8 +301,8 @@ var statesCookieName = 'mobile_guide_states';
     function initSpeciesListPage( pageId ){
         
         // we need the current states
-        var statesCookieName = 'mobile_guide_states';
-        var currentStates = getCookie(statesCookieName).split(',');
+        var filtersCookieName = 'mobile_guide_states';
+        var currentStates = getCookie(filtersCookieName).split(',');
         
         // set the score to - while we load the new ones
         $('#species-page .ui-li-count').html('Score: - ');
