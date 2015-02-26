@@ -383,9 +383,159 @@ function initProfilePage(){
        
     }
 
+
+/*
+    ************ Utility Methods *************  
+*/
+
+/* create scrollstop handler function */
+function checkScroll() {
+    /* You always need this in order to target
+       elements within active page */
+    var activePage = $.mobile.pageContainer.pagecontainer("getActivePage");
+
+    /* Viewport's height */
+    var screenHeight = $.mobile.getScreenHeight();
+
+    /* Content div - include padding too! */
+    var contentHeight = $(".ui-content", activePage).outerHeight();
+
+    /* Height of scrolled content (invisible) */
+    var scrolled = $(window).scrollTop();
+
+    /* Height of both Header & Footer and whether they are fixed
+       If any of them is fixed, we will remove (1px)
+       If not, outer height is what we need */
+    var header = $(".ui-header", activePage).outerHeight() - 1;
+    var footer = $(".ui-footer", activePage).outerHeight() - 1;
+
+    /* Math 101 - Window's scrollTop should
+       match content minus viewport plus toolbars */
+    var scrollEnd = contentHeight - screenHeight + header + footer;
+
+    /* if (pageX) is active and page's bottom or top is reached load more elements  */
+    if (activePage[0].id == "species-page"){
+        
+        // are we at the top?
+        if(scrolled == 0){
+            adjustListTop(activePage);
+        }
+        
+        // are we at the bottom?
+        if (scrolled >= scrollEnd) {
+            adjustListBottom(activePage);
+        }
+        
+    }
+}
+
+function adjustListTop(page){
+    console.log("add more to the top of the page");
+    
+    // prevent double calling
+    $(document).off("scrollstop");
+    $.mobile.loading("show", {
+      text: "loading more..",
+      textVisible: true
+    });
+    
+    setTimeout(function() {
+        
+        console.log(polyclave_data.species_order);
+
+        // get the id of the last child
+        for(var i = 0; i < 5; i++){
+            var first_child_index = parseInt($("li:first-child", page).attr('data-polyclave-species-index'));
+            if(first_child_index > 0){
+                var new_index = first_child_index - 1;
+                $("#polyclave-species-list", page).prepend(getSpeciesListItem(new_index));
+            }
+        }
+
+        $("#polyclave-species-list", page).listview("refresh");
+        
+        // if there are too many in the list knock some off the bottom.
+        while($("li", page).length > 30){
+           $("li:last-child", page).remove();
+        }
+        
+        $.mobile.loading("hide");
+        
+        $(document).on("scrollstop", checkScroll);
+        
+      }, 500);
+    
+}
+
+/* add more function */
+function adjustListBottom(page) {
+  $(document).off("scrollstop");
+  $.mobile.loading("show", {
+    text: "loading more..",
+    textVisible: true
+  });
+
+  setTimeout(function() {
+    
+    // get the id of the last child
+    for(var i = 0; i < 5; i++){
+        var last_child_index = parseInt($("li:last-child", page).attr('data-polyclave-species-index'));
+        if(last_child_index < polyclave_data.species_order.length -1){
+            var new_index = last_child_index + 1;
+            $("#polyclave-species-list", page).append(getSpeciesListItem(new_index));
+        }
+    }
+
+    $("#polyclave-species-list", page).listview("refresh");
+   
+    // if there are too many in the list knock some off the top.
+    while($("li", page).length > 30){
+       $("li:first-child", page).remove();
+    }
+    
+    $.mobile.loading("hide");
+    
+    $(document).on("scrollstop", checkScroll);
+
+  }, 500);
+
+}
+
+function getSpeciesListItem(species_index){
+    
+    // get the species
+    var species_id = polyclave_data.species_order[species_index];
+    var species = polyclave_data.species[species_id];
+    
+    var out = '<li data-polyclave-species-index="' + species_index + '" >';
+    out += '<a href="#profile-page?species=' + species.id + '" data-transition="slide">';
+    
+    
+    if(true){
+        out += '<img src="data/images/thumbsquared/species/' + species.id  + '/' +  species.id + '" />'
+    }
+    
+    
+    out += '<h3>' + species.title + '</h3>';
+    out += '<p>' + species.subtitle + '</p>';
+    if(species.score){
+        out += '<span class="ui-li-count">score: ' + species.score + '</span>';
+    }
+    out += '</a>';
+    out += '</li>';
+    
+    return out;
+    
+}
+
+
+/* attach scrollstop for first time */
+$(document).on("scrollstop", checkScroll);
+
+
+
     
     /*
-        ************ Utility Methods *************
         * The cookie methods actually uses local storage *
     */
     

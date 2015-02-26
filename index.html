@@ -35,7 +35,7 @@
 <!--  H O M E - P A G E  -->
 <div data-role="page" id="index-page">
 
-	<div data-role="header">
+	<div data-role="header" data-position="fixed">
 	    <a href="#about-page?banana=99" data-transition="slide" data-direction="reverse" data-icon="arrow-l" >About</a>
 		<h1>Home Page</h1>
 		<a href="#species-page" data-transition="slide" data-icon="arrow-r" data-iconpos="right" >Species</a>
@@ -58,7 +58,7 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 <!-- A B O U T - P A G E -->
 <div data-role="page" id="about-page">
 
-	<div data-role="header">
+	<div data-role="header" data-position="fixed" >
 		<h1>About</h1>
 		<a href="#index-page" class="ui-btn-right" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Home</a>
 	</div><!-- /header -->
@@ -74,30 +74,30 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 <!-- S P E C I E S - L I S T - P A G E -->
 <div data-role="page" id="species-page">
 
-	<div data-role="header" >
+	<div data-role="header" data-position="fixed" >
 	    <a href="index.html" data-direction="reverse"  data-transition="slide" data-icon="arrow-l">Home</a>
 		<h1>Species</h1>
 		<a href="#filter-page" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Filter</a>
 	</div><!-- /header -->
 
 	<div data-role="content">	
-		<ul data-role="listview">
-		    <li>
+		<ul data-role="listview" id="polyclave-species-list">
+		    <li data-polyclave-species-index="0" >
 		        <a href="#profile-page?species=160" data-transition="slide">
 		            <h3>Ortolan Bunting</h3>
 		            <p>Emberiza hortulana</p>
 		            <span class="ui-li-count" id="species-score-160">score: 0</span>
 		        </a>
 		    </li>
-		    <li><a href="#profile-page?species=159" data-transition="slide"><h3>Eastern Cinereous Bunting</h3><p>Emberiza semenowi</p><span class="ui-li-count" id="species-score-159">score: 0</span></a>
+		    <li data-polyclave-species-index="0" ><a href="#profile-page?species=159" data-transition="slide"><h3>Eastern Cinereous Bunting</h3><p>Emberiza semenowi</p><span class="ui-li-count" id="species-score-159">score: 0</span></a>
 		    </li>
-		    <li>
+		    <li data-polyclave-species-index="0" >
 		        <a href="#profile-page?species=158" data-transition="slide">
 		            <h3>Grey-necked Bunting</h3>
 		            <p>Emberiza buchanani</p>
 		            <span class="ui-li-count" id="species-score-158">score: 0</span></a>
 		    </li>
-		    <li>
+		    <li data-polyclave-species-index="0" >
 		        <a href="#profile-page?species=157" data-transition="slide">
 		            <img src="images/thumbsquared/species/157/Photo_546cceba88d27.jpg" />
 		            <h3>Pine Bunting</h3>
@@ -105,7 +105,7 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 		            <span class="ui-li-count" id="species-score-157">score: 0</span>
 		        </a>
 		    </li>
-		    <li>
+		    <li data-polyclave-species-index="0" >
 		        <a href="#profile-page?species=156" data-transition="slide">
 		            <img src="images/thumbsquared/species/156/Photo_546cccf2a5117.jpg" />
 		            <h3>Yellowhammer</h3>
@@ -113,7 +113,7 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 		            <span class="ui-li-count" id="species-score-156">score: 0</span>
 		        </a>
 		    </li>
-		    <li>
+		    <li data-polyclave-species-index="0" >
 		        <a href="#profile-page?species=155" data-transition="slide">
 		            <img src="images/thumbsquared/species/155/Photo_546ccc8f24a71.jpg" />
 		            <h3>Corn Bunting</h3>
@@ -129,7 +129,7 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 <!--  P R O F I L E - P A G E  -->
 <div data-role="page" id="profile-page">
 
-	<div data-role="header">
+	<div data-role="header" data-position="fixed">
 	    <a href="#species-page" data-icon="arrow-l" data-direction="reverse"  data-transition="slide">Species</a>
 		<h1>Species Profile</h1>
 		<a href="species_gallery_100.html" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Images</a>
@@ -155,7 +155,7 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 <!-- P R O F I L E - G A L L E R Y - P A G E -->
 <div data-role="page" id="species-gallery-100" class="gallery-page">
 
-	<div data-role="header" >
+	<div data-role="header" data-position="fixed" >
 	    <a href="#profile-page?100.html" data-direction="reverse"  data-transition="slide" data-icon="arrow-l">Back</a>
 		<h1>Images</h1>
 	</div><!-- /header -->
@@ -170,7 +170,7 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 <!--  F I L T E R - P A G E  -->
 <div data-role="page" id="filter-page">
 
-	<div data-role="header">
+	<div data-role="header" data-position="fixed">
 	    <a href="#species-page" data-direction="reverse" data-transition="slide" data-icon="arrow-l" data-iconpos="left">Species</a>
 		<h1>Filter</h1>
 		<a href="" data-transition="slide" id="filter-clear-button" >Clear</a>
