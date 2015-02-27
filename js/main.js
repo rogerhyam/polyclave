@@ -2,6 +2,7 @@
 
 var filtersCookieName = 'polyclave_filter_state';
 
+/*
 (function(window, $, PhotoSwipe){
     
     $(document).ready(function(){
@@ -35,6 +36,7 @@ var filtersCookieName = 'polyclave_filter_state';
     });
 
 }(window, window.jQuery, window.Code.PhotoSwipe));
+*/
 
 // this is run with every page loaded - may be cached though?
 $(document).bind('pageinit', function(e, data) {
@@ -50,7 +52,6 @@ $(document).bind('pageinit', function(e, data) {
      });
 
 });
-
 
     
 // This is called when moving between pages first with the
@@ -74,6 +75,8 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
          }
      }
      
+    
+     
       
     // When received with data.toPage set to a jQuery object, the event indicates that the destination page has been loaded and navigation will continue.
     } else {
@@ -89,8 +92,11 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
             case 'about-page':
                 initAboutPage();
                 break;
+            case 'species-page':
+                initSpeciesPage( data.toPage.attr("id") );
+                break;
             case 'profile-page':
-                initProfilePage();
+                initProfilePage(data);
                 break;
             case 'score':
                 initScorePage( data.toPage.attr("id") );
@@ -98,10 +104,6 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
             case 'filter':
                 initFilterPage( data.toPage.attr("id") );
                 break;
-            case 'species':
-                initSpeciesListPage( data.toPage.attr("id") );
-                break;
-
             default:
                 console.log("No init method for " + data.toPage.attr("id"));
         }
@@ -113,13 +115,34 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
 });
 
    // Called after the page has become visible.
-    $(document).bind( "pagechange", function( e, data ) {
+    $(document).bind( "pagecontainershow", function( e, data ) {
         
         // this ensures the check boxes on the score pages are updated
         // could perhaps be run only with score pages for efficiency 
         // but no harm in making sure all checkboxes are up to date!
-        $("input[type='checkbox']").checkboxradio("refresh");
-        
+        switch(data.toPage.attr("id")){
+            case 'filter-page':
+                $("input[type='checkbox']", data.toPage).checkboxradio("refresh");
+                break;
+            case 'species-page':
+                $("html, body").animate({ "scrollTop" : polyclave_data.species_last_scroll }, 500);
+                /*
+                // do we have a current species set?
+                var species_id = getCookie('species');  
+                if(typeof species_id != "undefined"){
+                    var species_li = $( 'li[data-polyclave-species-id="s'+ species_id +'"]');
+                    var header_height = $(".ui-header", data.toPage).outerHeight() - 1;
+                     if(species_li.length > 0){
+                         $("html, body").animate({ "scrollTop" : species_li.offset().top - header_height -10 }, 500);
+                         //$.mobile.silentScroll(species_li.offset().top - header_height -10);
+                     }
+                }
+                */
+                break;
+            default:
+                console.log("No pagechange method for " + data.toPage.attr("id"));
+            
+        }
         
     });
 
@@ -132,15 +155,18 @@ function initAboutPage(){
     $('#about-page-subtitle').html( polyclave_data.created );
 }
 
-function initProfilePage(){
+function initProfilePage(data){
     console.log('initProfilePage: ' + getCookie('species'));
-    
     
     var species_id = getCookie('species');
     var species = polyclave_data.species['s'+ species_id];
     
     // basic info about the species
-    // fixme - thumbnail here?
+    if(species.images.length > 0){
+        $('#profile-page .profile-image').attr('src','data/images/thumbsquared/species/' + species.id  + '/' +  species.images[0].filename );
+    }else{
+        $('#profile-page .profile-image').attr('src', null);
+    }
     $('#profile-page .profile-title').html(species.title);
     $('#profile-page .profile-subtitle').html(species.subtitle);
     $('#profile-page .profile-notes').html(species.notes);
@@ -298,8 +324,64 @@ function initProfilePage(){
     }
     
     
-    function initSpeciesListPage( pageId ){
+    function initSpeciesPage( pageId ){
         
+        console.log("initSpeciesPage");
+        
+        //var page = $.mobile.pageContainer.pagecontainer("getActivePage");
+        var start_index = 0;
+        
+        // do we have a current species set?
+         var species_id = getCookie('species');  
+         if(typeof species_id != "undefined"){
+         
+             console.log("we have a selected species = " + species_id);
+             
+             // is it already loaded in the document - this is probably the case
+             var species_li = $( 'li[data-polyclave-species-id="s'+ species_id +'"]');
+             if(species_li.length == 0){
+                 
+                 // if we don't then find where it comes in the order of things
+                 // and start with it
+                 for(var i = 0; i < polyclave_data.species_order.length; i++){
+                     if(polyclave_data.species_order[i] == 's' + species_id){
+                         start_index = i;
+                     }
+                 }
+
+                 // if we are beyond the end of the list the back up a bit
+                 if(polyclave_data.species_order.length - (start_index +1) < 30){
+                     start_index = polyclave_data.species_order.length - 31;
+                 }
+
+                 console.log("start_index = " + start_index);
+                 for(var i = start_index; i < start_index + 30; i++){
+                      $("#polyclave-species-list").append(getSpeciesListItem(i));
+                  }
+
+             }// selected species not there so added
+
+             // highlight the selected species - it will be there by now
+             $('#polyclave-species-list li').removeClass('polyclave-current-species');
+            // $('#polyclave-species-list li').attr("data-theme", "c").removeClass("ui-btn-up-b").removeClass('ui-btn-hover-b').addClass("ui-btn-up-c").addClass('ui-btn-hover-c');
+             
+             $('#polyclave-species-list li[data-polyclave-species-id="s'+ species_id +'"]').addClass('polyclave-current-species');
+           // $('#polyclave-species-list li[data-polyclave-species-id="s'+ species_id +'"]').attr("data-theme", "b").removeClass("ui-btn-up-c").removeClass('ui-btn-hover-c').addClass("ui-btn-up-b").addClass('ui-btn-hover-b');
+
+             
+             
+         }else{
+             //  we have no current species so just load the first 30 species - will stop automatically if not it runs off the end
+             console.log("loading first thirty");
+              for(var i = 0; i < 30; i++){
+                  var li = getSpeciesListItem(i);
+                  if(li != null){
+                      $("#polyclave-species-list", page).append(li);
+                  }
+              }
+         }
+         
+        /*
         // we need the current states
         var filtersCookieName = 'mobile_guide_states';
         var currentStates = getCookie(filtersCookieName).split(',');
@@ -373,13 +455,10 @@ function initProfilePage(){
                 mylist.append(itm);
                
             });
-            
-            
-
           
         });
         
-        
+        */
        
     }
 
@@ -390,6 +469,9 @@ function initProfilePage(){
 
 /* create scrollstop handler function */
 function checkScroll() {
+    
+    polyclave_data.species_last_scroll = $(window).scrollTop();
+    
     /* You always need this in order to target
        elements within active page */
     var activePage = $.mobile.pageContainer.pagecontainer("getActivePage");
@@ -430,7 +512,6 @@ function checkScroll() {
 }
 
 function adjustListTop(page){
-    console.log("add more to the top of the page");
     
     // prevent double calling
     $(document).off("scrollstop");
@@ -441,8 +522,6 @@ function adjustListTop(page){
     
     setTimeout(function() {
         
-        console.log(polyclave_data.species_order);
-
         // get the id of the last child
         for(var i = 0; i < 5; i++){
             var first_child_index = parseInt($("li:first-child", page).attr('data-polyclave-species-index'));
@@ -503,18 +582,20 @@ function adjustListBottom(page) {
 
 function getSpeciesListItem(species_index){
     
+    // do nothing if we are out of range
+    if(species_index < 0) return null;
+    if(species_index >= polyclave_data.species_order.length) return null;
+        
     // get the species
     var species_id = polyclave_data.species_order[species_index];
     var species = polyclave_data.species[species_id];
     
-    var out = '<li data-polyclave-species-index="' + species_index + '" >';
+    var out = '<li data-polyclave-species-index="' + species_index + '"  data-polyclave-species-id="' + species_id + '" >';
     out += '<a href="#profile-page?species=' + species.id + '" data-transition="slide">';
-    
-    
-    if(true){
-        out += '<img src="data/images/thumbsquared/species/' + species.id  + '/' +  species.id + '" />'
+        
+    if(species.images.length > 0){
+        out += '<img src="data/images/thumbsquared/species/' + species.id  + '/' +  species.images[0].filename + '" />'
     }
-    
     
     out += '<h3>' + species.title + '</h3>';
     out += '<p>' + species.subtitle + '</p>';

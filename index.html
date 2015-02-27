@@ -13,8 +13,8 @@
         <link rel="stylesheet" href="style/photoswipe.css" type="text/css" >
         <link rel="stylesheet" href="style/photoswipe-jquery-mobile.css" type="text/css">
         
-        <!-- Application CSS -- >
-        <link rel="stylesheet" href="style/main.css" type="text/css" media="screen" charset="utf-8">
+        <!-- Application CSS -->
+        <link rel="stylesheet" href="style/main.css" type="text/css" charset="utf-8">
          
         <!-- JQuery Stuff -->
         <script src="js/jquery-2.1.3.min.js" type="text/javascript" charset="utf-8"></script>        
@@ -80,50 +80,10 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 		<a href="#filter-page" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Filter</a>
 	</div><!-- /header -->
 
-	<div data-role="content">	
-		<ul data-role="listview" id="polyclave-species-list">
-		    <li data-polyclave-species-index="0" >
-		        <a href="#profile-page?species=160" data-transition="slide">
-		            <h3>Ortolan Bunting</h3>
-		            <p>Emberiza hortulana</p>
-		            <span class="ui-li-count" id="species-score-160">score: 0</span>
-		        </a>
-		    </li>
-		    <li data-polyclave-species-index="0" ><a href="#profile-page?species=159" data-transition="slide"><h3>Eastern Cinereous Bunting</h3><p>Emberiza semenowi</p><span class="ui-li-count" id="species-score-159">score: 0</span></a>
-		    </li>
-		    <li data-polyclave-species-index="0" >
-		        <a href="#profile-page?species=158" data-transition="slide">
-		            <h3>Grey-necked Bunting</h3>
-		            <p>Emberiza buchanani</p>
-		            <span class="ui-li-count" id="species-score-158">score: 0</span></a>
-		    </li>
-		    <li data-polyclave-species-index="0" >
-		        <a href="#profile-page?species=157" data-transition="slide">
-		            <img src="images/thumbsquared/species/157/Photo_546cceba88d27.jpg" />
-		            <h3>Pine Bunting</h3>
-		            <p>Emberiza leucocephalus</p>
-		            <span class="ui-li-count" id="species-score-157">score: 0</span>
-		        </a>
-		    </li>
-		    <li data-polyclave-species-index="0" >
-		        <a href="#profile-page?species=156" data-transition="slide">
-		            <img src="images/thumbsquared/species/156/Photo_546cccf2a5117.jpg" />
-		            <h3>Yellowhammer</h3>
-		            <p>Emberiza citronella</p>
-		            <span class="ui-li-count" id="species-score-156">score: 0</span>
-		        </a>
-		    </li>
-		    <li data-polyclave-species-index="0" >
-		        <a href="#profile-page?species=155" data-transition="slide">
-		            <img src="images/thumbsquared/species/155/Photo_546ccc8f24a71.jpg" />
-		            <h3>Corn Bunting</h3>
-		            <p>Emberiza calandra</p>
-		            <span class="ui-li-count" id="species-score-155">score: 0</span>
-		        </a>
-		    </li>
-		</ul>
-		
-	</div><!-- /content -->
+    <div data-role="content">	
+        <ul data-role="listview" id="polyclave-species-list"></ul>
+    </div><!-- /content -->
+    
 </div><!-- /page -->
 
 <!--  P R O F I L E - P A G E  -->
@@ -136,7 +96,7 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 	</div><!-- /header -->
 
 	<div data-role="content">
-	     
+	     <img class="profile-image" />
          <h2 class="profile-title">species-title</h2>
          <p class="profile-subtitle">species-subtitle</p>
          <div class="profile-notes" >profile-note</div>
@@ -161,7 +121,9 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 	</div><!-- /header -->
 	<div data-role="content">
         <ul class="gallery">
+         <!-- 
          <li><a href="images/pagesize/species/100/Photo_546b8cdf9c041.jpg" rel="external"><img src="images/thumbsquared/species/100/Photo_546b8cdf9c041.jpg" alt="Willow Warbler" /></a></li><li><a href="images/pagesize/species/100/Photo_546b8cdfa1eb3.jpg" rel="external"><img src="images/thumbsquared/species/100/Photo_546b8cdfa1eb3.jpg" alt="Willow Warbler" /></a></li><li><a href="images/pagesize/species/100/Photo_546b8cdfa3994.jpg" rel="external"><img src="images/thumbsquared/species/100/Photo_546b8cdfa3994.jpg" alt="Willow Warbler" /></a></li>         
+         -->
          </ul>
     </div>
 </div><!-- /page -->
