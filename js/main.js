@@ -42,17 +42,42 @@ var filtersCookieName = 'polyclave_filter_state';
 $(document).bind('pageinit', function(e, data) {
     console.log("- pageinit -");
     
-    // we need to clear the fiter 
+    // we need to clear the filter 
     $('#filter-clear-button').click(function(){
+         e.stopImmediatePropagation();
+         saveCurrentStates([]);
+         initFilterPage();
+     });
+     
+     //playing the media
+     $('#polyclave-audio-button').on('click', function(e){
+         e.stopImmediatePropagation();
+         console.log('audio button pressed');
          
-         var newArray = [];
-         setCookie(filtersCookieName,newArray.join(),365);
-         document.location.reload();
+         // if it is playing then stop it.
+         if($('#polyclave-audio-button').data('playing')){
+             console.log('playing so going pausing');
+             $('#polyclave-audio')[0].pause();
+             $('#polyclave-audio-button').html('Play Audio');
+             $('#polyclave-audio-button').data('playing', false);
+         }else{
+             console.log('Not playing so going to play');
+             $('#polyclave-audio')[0].play();
+             $('#polyclave-audio-button').html('Stop Audio');
+             $('#polyclave-audio-button').data('playing', true);
+            
+         }
          
      });
+     
+     // media finished
+     $('#polyclave-audio').bind('ended', function(){
+         $('#polyclave-audio-button').html('Play Audio');
+         $('#polyclave-audio-button').data('playing', false);
+     });
+     
 
 });
-
     
 // This is called when moving between pages first with the
 // uri then with the fragment of dom that is about to be displayed.
@@ -75,9 +100,6 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
          }
      }
      
-    
-     
-      
     // When received with data.toPage set to a jQuery object, the event indicates that the destination page has been loaded and navigation will continue.
     } else {
         
@@ -98,11 +120,11 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
             case 'profile-page':
                 initProfilePage(data);
                 break;
-            case 'score':
-                initScorePage( data.toPage.attr("id") );
-                break;
-            case 'filter':
+            case 'filter-page':
                 initFilterPage( data.toPage.attr("id") );
+                break;
+            case 'score-page':
+                initScorePage();
                 break;
             default:
                 console.log("No init method for " + data.toPage.attr("id"));
@@ -126,18 +148,6 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
                 break;
             case 'species-page':
                 $("html, body").animate({ "scrollTop" : polyclave_data.species_last_scroll }, 500);
-                /*
-                // do we have a current species set?
-                var species_id = getCookie('species');  
-                if(typeof species_id != "undefined"){
-                    var species_li = $( 'li[data-polyclave-species-id="s'+ species_id +'"]');
-                    var header_height = $(".ui-header", data.toPage).outerHeight() - 1;
-                     if(species_li.length > 0){
-                         $("html, body").animate({ "scrollTop" : species_li.offset().top - header_height -10 }, 500);
-                         //$.mobile.silentScroll(species_li.offset().top - header_height -10);
-                     }
-                }
-                */
                 break;
             default:
                 console.log("No pagechange method for " + data.toPage.attr("id"));
@@ -160,6 +170,7 @@ function initProfilePage(data){
     
     var species_id = getCookie('species');
     var species = polyclave_data.species['s'+ species_id];
+    
     
     // basic info about the species
     if(species.images.length > 0){
@@ -198,6 +209,7 @@ function initProfilePage(data){
                 li.find('p').html('');
                 li.find('p').hide();
                 char_list.append(li);
+                
             }
            
         }    
@@ -210,6 +222,9 @@ function initProfilePage(data){
             
             var character = group.characters[j];
             var lip = $('#profile-character-' + character.id + ' p');
+            
+            // clear out the old ones
+            lip.empty();
             
             var count = 0;
             for(var k = 0; k < character.states.length; k++){
@@ -234,73 +249,84 @@ function initProfilePage(data){
     
 }
 
-    /*
-        Init the score page so by popul
-    */
-    function initScorePage(pageId){
-        
-        console.log("Init: " + pageId);
-        
-        var inputSelector = "#" + pageId + " .stateCheck";
-        
-        // make sure we have a cookie of some kind for the states
-        if(getCookie(filtersCookieName) == null){
-            setCookie(filtersCookieName, '' , 365);
-        }else{
-            var currentStates = getCookie(filtersCookieName).split(',');
-        }
-        
-        console.log(currentStates);
-        
-        // set the check boxes as per the values in the cookie
-         $(inputSelector).each(function(index, input){
-             
-             for(var i = 0; i < currentStates.length; i++){
-                 
-                 if(currentStates[i] == input.value){
-                     input.checked = true;
-                     return;
-                 }
-             }
-             
-             // otherwise they are not checked
-             input.checked = false;
-         });
-        
-        
-        //listen to clicking and unclicking of checkboxes
-        $(inputSelector).change(function(e){
-            
-            var currentStates = getCookie(filtersCookieName).split(',');
-            var changedState = e.currentTarget.value
-            
-            if(e.currentTarget.checked){
-                
-                console.log("Add " + changedState); 
-                currentStates[currentStates.length] = e.currentTarget.value;
-                setCookie(filtersCookieName,currentStates.join(),365);
-                
-            }else{
-                console.log("Remove " + changedState);
-                var newArray = [];
-                for(var i = 0; i < currentStates.length; i++){
-                    if(currentStates[i] != changedState) newArray[newArray.length] = currentStates[i];
-                }
-                setCookie(filtersCookieName,newArray.join(),365);
-                
-            }
-                       
-        });
-        
-    }
-    
     
     function initFilterPage( pageId ){
 
-        var filtersCookieName = 'mobile_guide_states';
-        var currentStates = getCookie(filtersCookieName).split(',');
+
+        // set up the page for the first time add in the characters
+        var char_list = $('#polyclave-filter-list');
+
+        // if we haven't got the characters loaded - load them up
+        if(char_list.children().length == 0){
+
+            // work through the groups
+            for(var i = 0; i < polyclave_data.character_tree.length; i++){
+                var group = polyclave_data.character_tree[i];
+                
+                char_list.append('<li data-role="list-divider" >'+  group.title  +'</li>');
+
+                // characters for this group
+                for(var j = 0; j < group.characters.length; j++){
+                    var character = group.characters[j];
+                    
+                    var a = $('<a></a>');
+                    a.attr('href', '#score-page?character='+ character.id );
+                    a.attr('data-transition', 'slide');
+                    a.html(character.title);
+                    
+                    var p = $('<p></p>');
+                    p.hide();
+                    a.append(p);
+
+                    var li = $('<li></li>');
+                    li.attr('data-polyclave-filter-character', character.id);
+                    li.addClass('polyclave-filter-character');
+                    li.append(a);
+                    
+                    
+                    char_list.append(li);
+                    
+                }
+
+            }    
         
-        console.log(currentStates);
+            char_list.listview('refresh');
+        }
+        
+        // write in the current filter state
+        for(var i = 0; i < polyclave_data.character_tree.length; i++){
+            var group = polyclave_data.character_tree[i];
+         
+            // characters for this group
+            for(var j = 0; j < group.characters.length; j++){
+                var character = group.characters[j];
+                
+                var lip = $('#polyclave-filter-list li[data-polyclave-filter-character="' + character.id + '"] p');
+                lip.html('');
+
+                var count = 0;
+                for (var s=0; s < character.states.length; s++) {
+                    var state = character.states[s];
+                    
+                    if (stateIsOn(state.id)){
+                        if(count > 0 ) lip.append('<span class="polyclave-state-spacer"> | </span>');
+                        lip.append('<span class="polyclave-state">' + state.title + '</span>');
+                        count++;
+                    }
+                };
+
+                if(count> 0){
+                    lip.show();
+                }else{
+                   lip.hide();  
+                } 
+
+            }
+        
+        }
+        
+        /*
+       
         
         // we update the page in response to getting
         // the
@@ -319,10 +345,78 @@ function initProfilePage(data){
             }
                       
         });
-
+        */
 
     }
     
+    function initScorePage(){
+        
+        console.log('initScorePage: ' + getCookie('character'));        
+        
+        // get the character by id
+        var char_id = getCookie('character');
+        var character = null;
+        group_loop: 
+        for(var g = 0; g < polyclave_data.character_tree.length; g++){
+            var group = polyclave_data.character_tree[g];
+            for(var c = 0; c < group.characters.length; c++){
+                character = group.characters[c];
+                if(character.id == char_id){
+                    break group_loop;
+                }
+            }
+        }
+        
+        console.log(character);
+        
+        // build a field set
+       
+        var field_set = $('#score-page fieldset');
+        
+        // remove the old ones
+        field_set.find('.ui-checkbox').remove();
+        field_set.find('legend').remove();
+        
+        
+        field_set.controlgroup("refresh");
+        
+        field_set.append('<legend><h2>'+ character.title + '</h2></legend>');
+        
+        // write each state into the fieldset
+        for (var i=0; i < character.states.length; i++) {
+            var state = character.states[i];
+            var name_id = 'checkbox_character_' + character.id + '_state_' + state.id;
+
+            var label = $('<label></label>');
+            label.html(state.title);
+            console.log(field_set.controlgroup("container"));
+            field_set.controlgroup("container").append(label);
+            
+            var input = $('<input></input>');
+            input.attr('type', 'checkbox');
+            input.attr('name', name_id);
+            input.attr('id', name_id);
+            input.attr('value', state.id);
+
+            if(stateIsOn(state.id)){
+                input.attr('checked', true);
+            }else{
+                input.attr('checked', false);
+            }
+                      
+            input.change(function scoreChanged(e){
+                var state_id = e.currentTarget.value;
+                var on = e.currentTarget.checked;
+                setCurrentState(state_id, on);                                
+            });
+
+            label.append(input);
+
+        };
+        
+        field_set.enhanceWithin().controlgroup("refresh");
+   
+    }    
     
     function initSpeciesPage( pageId ){
         
@@ -376,10 +470,12 @@ function initProfilePage(data){
               for(var i = 0; i < 30; i++){
                   var li = getSpeciesListItem(i);
                   if(li != null){
-                      $("#polyclave-species-list", page).append(li);
+                      $("#polyclave-species-list").append(li);
                   }
               }
          }
+         
+         $("#polyclave-species-list").listview("refresh");        
          
         /*
         // we need the current states
@@ -613,8 +709,53 @@ function getSpeciesListItem(species_index){
 /* attach scrollstop for first time */
 $(document).on("scrollstop", checkScroll);
 
+function stateIsOn(state_id){
+    var currentStates = getCurrentStates();
+    if($.inArray(state_id.toString(), currentStates) != -1){
+        return true;
+    }else{
+        return false;
+    }
+}
 
+function setCurrentState(state_id, on){
+        
+    var currentStates = getCurrentStates();
 
+    if($.inArray(state_id, currentStates) != -1){
+        
+        // if it is in the array and shouldn't be
+        if(!on){
+            currentStates = jQuery.grep(currentStates, function(value) {
+              return value != state_id;
+            });
+        }
+        
+    }else{
+        // if it isn't in the array but should be
+        if(on){
+            currentStates.push(state_id);
+        }
+    }
+    saveCurrentStates(currentStates);
+}
+
+// get the current filter states
+function getCurrentStates(){
+    
+    var currentStateString = getCookie('polyclave-states');
+    if(currentStateString.length == 0){
+        currentStates = [];
+    }else{
+        currentStates = JSON.parse(currentStateString);
+    }
+    
+    return currentStates;
+}
+
+function saveCurrentStates(states){
+    setCookie('polyclave-states', JSON.stringify(states), 365);
+}
     
     /*
         * The cookie methods actually uses local storage *

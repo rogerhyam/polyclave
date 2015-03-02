@@ -30,6 +30,8 @@
     
     </head> 
 <body> 
+    
+<audio src="data/audio/test.mp3" id="polyclave-audio" ></audio>
 
 
 <!--  H O M E - P A G E  -->
@@ -101,6 +103,7 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
          <p class="profile-subtitle">species-subtitle</p>
          <div class="profile-notes" >profile-note</div>
          
+         <button id="polyclave-audio-button" data-playing="false" class="ui-btn ui-icon-audio ui-btn-icon-left ui-corner-all">Play Audio</button>
          <ul data-role="listview" data-inset="true" id="profile-characters" ></ul>
 
          <ul data-role="listview" data-inset="true" style="display:none;">
@@ -126,35 +129,59 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
          -->
          </ul>
     </div>
+    
 </div><!-- /page -->
 
 
 <!--  F I L T E R - P A G E  -->
 <div data-role="page" id="filter-page">
 
-	<div data-role="header" data-position="fixed">
-	    <a href="#species-page" data-direction="reverse" data-transition="slide" data-icon="arrow-l" data-iconpos="left">Species</a>
-		<h1>Filter</h1>
-		<a href="" data-transition="slide" id="filter-clear-button" >Clear</a>
-	</div>
-
-	<div data-role="content">
-	    <div class="content-primary">
-
-<h2>Select as many identifying features as possible from the list below</h2>
-    <ul data-role="listview" data-inset="true">
-        <li><a href="score_33.html" data-transition="slide">Size</a><span class="ui-li-count"><span class="filterState" id="filterState-71">Big , </span><span class="filterState" id="filterState-72">Small, </span></span></li>
-        <li><a href="score_36.html" data-transition="slide">Shape</a><span class="ui-li-count"><span class="filterState" id="filterState-83">Sparrow, </span><span class="filterState" id="filterState-84">Dove, </span><span class="filterState" id="filterState-85">Chicken, </span><span class="filterState" id="filterState-86">Crow, </span><span class="filterState" id="filterState-87">Warbler, </span><span class="filterState" id="filterState-88">Blackbird, </span><span class="filterState" id="filterState-89">Heron, </span><span class="filterState" id="filterState-90">Bird of Prey, </span></span></li>
-        <li><a href="score_32.html" data-transition="slide">Bill shape</a><span class="ui-li-count"><span class="filterState" id="filterState-67">Fine, </span><span class="filterState" id="filterState-68">Stout, </span><span class="filterState" id="filterState-69">Long, </span><span class="filterState" id="filterState-70">Hooked, </span></span></li>
-        <li><a href="score_34.html" data-transition="slide">Habitat</a><span class="ui-li-count"><span class="filterState" id="filterState-74">Trees / Bushes, </span><span class="filterState" id="filterState-75">Sky / Soaring, </span><span class="filterState" id="filterState-76">Mountain / Cliffs, </span><span class="filterState" id="filterState-77">Rocks, </span><span class="filterState" id="filterState-78">Farmland, </span><span class="filterState" id="filterState-91">River / Stream , </span><span class="filterState" id="filterState-92">Village, </span></span></li>
-        <li><a href="score_35.html" data-transition="slide">Season</a><span class="ui-li-count"><span class="filterState" id="filterState-81">Winter, </span><span class="filterState" id="filterState-80">Spring, </span><span class="filterState" id="filterState-82">Summer, </span><span class="filterState" id="filterState-79">Autumn, </span></span></li>
-        <li><a href="score_31.html" data-transition="slide">What colours did you see?</a><span class="ui-li-count"><span class="filterState" id="filterState-58">Black, </span><span class="filterState" id="filterState-93">Green, </span><span class="filterState" id="filterState-59">White, </span><span class="filterState" id="filterState-60">Blue, </span><span class="filterState" id="filterState-61">Yellow, </span><span class="filterState" id="filterState-62">Red, </span><span class="filterState" id="filterState-63">Grey, </span><span class="filterState" id="filterState-64">Brown, </span><span class="filterState" id="filterState-65">Stripes / Bars, </span><span class="filterState" id="filterState-66">Spots, </span></span></li>
-    </ul>
+    <div data-role="header" data-position="fixed">
+        <a href="#species-page" data-direction="reverse" data-transition="slide" data-icon="arrow-l" data-iconpos="left">Species</a>
+        <h1>Filter</h1>
+        <a href="" data-transition="slide" id="filter-clear-button" >Clear</a>
+    </div>
     
+    <div data-role="content">
+        <div class="content-primary">
+            <h2>Select as many identifying features as possible from the list below</h2>
+            <ul data-role="listview" data-inset="true" id="polyclave-filter-list"></ul>
         </div><!-- primary content -->
     </div><!-- content -->
+
 </div><!-- /page -->
 
+<!-- S C O R E - P A G E -->
+<div data-role="page" id="score-page">
+
+	<div data-role="header">
+	    <a href="#filter-page" data-direction="reverse" data-transition="slide" data-icon="arrow-l">Done</a>
+		<h1>Score</h1>
+		<a href="#character-help-page" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Help</a>
+	</div><!-- /header -->
+
+	<div data-role="content" >
+	    <form>
+            <fieldset data-role="controlgroup">
+
+<!--
+
+ <legend>What colours did you see?</legend>
+ <input type="checkbox" name="state_58" value="58" id="state_58" class="custom stateCheck" />
+ <label for="state_58">Black</label>
+ 
+ <input type="checkbox" name="state_93" value="93" id="state_93" class="custom stateCheck" />
+ <label for="state_93">Green</label>
+ 
+ <input type="checkbox" name="state_59" value="59" id="state_59" class="custom stateCheck" /><label for="state_59">White</label><input type="checkbox" name="state_60" value="60" id="state_60" class="custom stateCheck" /><label for="state_60">Blue</label><input type="checkbox" name="state_61" value="61" id="state_61" class="custom stateCheck" /><label for="state_61">Yellow</label><input type="checkbox" name="state_62" value="62" id="state_62" class="custom stateCheck" /><label for="state_62">Red</label><input type="checkbox" name="state_63" value="63" id="state_63" class="custom stateCheck" /><label for="state_63">Grey</label><input type="checkbox" name="state_64" value="64" id="state_64" class="custom stateCheck" /><label for="state_64">Brown</label><input type="checkbox" name="state_65" value="65" id="state_65" class="custom stateCheck" /><label for="state_65">Stripes / Bars</label><input type="checkbox" name="state_66" value="66" id="state_66" class="custom stateCheck" /><label for="state_66">Spots</label>
+-->
+    
+            </fieldset>
+	    </form>
+    </div>
+    
+    
+</div><!-- /page -->
 
 
 <!-- start:footer.php -->
