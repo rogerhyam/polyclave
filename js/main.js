@@ -46,6 +46,7 @@ $(document).bind('pageinit', function(e, data) {
     $('#filter-clear-button').click(function(){
          e.stopImmediatePropagation();
          saveCurrentStates([]);
+         resetSpeciesScores();
          initFilterPage();
      });
      
@@ -324,28 +325,6 @@ function initProfilePage(data){
             }
         
         }
-        
-        /*
-       
-        
-        // we update the page in response to getting
-        // the
-        
-        $(".filterState").each(function(index, span){
-
-            $('#' + span.id).css('display', 'none');
-      
-            for(var i = 0; i < currentStates.length; i++){
-              
-              if('filterState-' + currentStates[i] == span.id){
-                  $('#' + span.id).css('display', 'inline');
-                  return;
-              }
-              
-            }
-                      
-        });
-        */
 
     }
     
@@ -425,9 +404,10 @@ function initProfilePage(data){
         //var page = $.mobile.pageContainer.pagecontainer("getActivePage");
         var start_index = 0;
         
-        // do we have a current species set?
+         // if there is a current species set and haven't just updated the
+         // scores then display the last species if possible
          var species_id = getCookie('species');  
-         if(typeof species_id != "undefined"){
+         if(!polyclave_data.scores_changed && typeof species_id != "undefined"){
          
              console.log("we have a selected species = " + species_id);
              
@@ -457,16 +437,22 @@ function initProfilePage(data){
 
              // highlight the selected species - it will be there by now
              $('#polyclave-species-list li').removeClass('polyclave-current-species');
-            // $('#polyclave-species-list li').attr("data-theme", "c").removeClass("ui-btn-up-b").removeClass('ui-btn-hover-b').addClass("ui-btn-up-c").addClass('ui-btn-hover-c');
              
              $('#polyclave-species-list li[data-polyclave-species-id="s'+ species_id +'"]').addClass('polyclave-current-species');
-           // $('#polyclave-species-list li[data-polyclave-species-id="s'+ species_id +'"]').attr("data-theme", "b").removeClass("ui-btn-up-c").removeClass('ui-btn-hover-c').addClass("ui-btn-up-b").addClass('ui-btn-hover-b');
-
-             
              
          }else{
-             //  we have no current species so just load the first 30 species - will stop automatically if not it runs off the end
+             //  we have no current species or the scores have changed
+             // so just load the first 30 species - will stop automatically if not it runs off the end
              console.log("loading first thirty");
+              
+              // remove the existing ones
+              $('#polyclave-species-list li').remove();
+              
+              // if the score has changed we should sort the list before display.
+              if(polyclave_data.scores_changed){
+                  sortSpeciesList();
+              }
+              
               for(var i = 0; i < 30; i++){
                   var li = getSpeciesListItem(i);
                   if(li != null){
@@ -476,85 +462,7 @@ function initProfilePage(data){
          }
          
          $("#polyclave-species-list").listview("refresh");        
-         
-        /*
-        // we need the current states
-        var filtersCookieName = 'mobile_guide_states';
-        var currentStates = getCookie(filtersCookieName).split(',');
-        
-        // set the score to - while we load the new ones
-        $('#species-page .ui-li-count').html('Score: - ');
-        
-        var scoreMatrix = [];
-        
-        // call the ajax for a list of all scores
-        $.getJSON('js/scores_data.js', function(data) {
-         
-          // work through the items in the
-          var currentSpecies = null;
-          $.each(data, function(index, row){
-            
-            // make sure we are on the right species
-            // they are sorted so come in blocks
-            if (currentSpecies == null || currentSpecies.speciesId != row.species_id){
-                currentSpecies = {speciesId:row.species_id, score:0};
-                scoreMatrix[currentSpecies.speciesId] = currentSpecies;
-            }
-                        
-            // is this state one of the ones that has been selected
-            for(var i = 0; i < currentStates.length; i++){
-                if(row.state_id == currentStates[i]){
-                    currentSpecies.score = currentSpecies.score + 1;
-                    break;
-                }
-            }  
-          });
-          
-          // we now have a matrix of species scores
-          // let's update the display
-           $('#species-page .ui-li-count').each(function(index, span){
-               
-               var spanId =  span.id.substring(14);
-               currentSpecies = scoreMatrix[spanId];
-               
-               if(spanId in scoreMatrix){
-                   span.innerHTML = 'Score: ' + currentSpecies.score;
-                   
-                   $('#'+span.id).data('score', currentSpecies.score);
-                   
-               }else{
-                   span.innerHTML = 'Score: 0';
-                   $('#'+span.id).data('score', 0);
-                    
-               }
-               
-            });
-            
-            // now sort the list as per instructions..
-            var mylist = $('#species-page ul');
-            var listitems = mylist.children('li').get();
-            listitems.sort(function(a, b) {
-                
-               var elementA = $(a).find('.ui-li-count');
-               var scoreA = elementA.data('score');
-               
-               var elementB = $(b).find('.ui-li-count');
-               var scoreB = elementB.data('score');
-               
-               if(scoreA == scoreB) return 0;
-               if(scoreA > scoreB) return -1;
-               if(scoreA < scoreB) return 1;
-            
-            })
-            //$('#species-page ul').empty();
-            $.each(listitems, function(idx, itm) { 
-                mylist.append(itm);
-               
-            });
-          
-        });
-        
-        */
+
        
     }
 
@@ -562,6 +470,38 @@ function initProfilePage(data){
 /*
     ************ Utility Methods *************  
 */
+
+function sortSpeciesList(){
+
+    console.log('sortSpeciesList');
+
+    console.log(polyclave_data.species_order);
+
+    polyclave_data.species_order.sort(function(a, b){       
+        var species_a = polyclave_data.species[a];
+        var species_b = polyclave_data.species[b];
+        
+        // score descending
+        if(species_a.score > species_b.score) return -1;
+        if(species_a.score < species_b.score) return 1;
+        
+        // if they have the same score then do on natural ordering
+        if(species_a.score == species_b.score){
+            // sort order ascending
+            if(species_a.sort_order < species_b.sort_order) return -1;
+            if(species_a.sort_order > species_b.sort_order) return 1;
+            if(species_a.sort_order == species_b.sort_order) return 0;
+        } 
+    
+    });
+    
+    console.log(polyclave_data.species_order);
+
+    // flag that list is now in sync with scores
+    polyclave_data.scores_changed = false;
+
+}
+
 
 /* create scrollstop handler function */
 function checkScroll() {
@@ -686,6 +626,8 @@ function getSpeciesListItem(species_index){
     var species_id = polyclave_data.species_order[species_index];
     var species = polyclave_data.species[species_id];
     
+    console.log(species);
+    
     var out = '<li data-polyclave-species-index="' + species_index + '"  data-polyclave-species-id="' + species_id + '" >';
     out += '<a href="#profile-page?species=' + species.id + '" data-transition="slide">';
         
@@ -695,9 +637,10 @@ function getSpeciesListItem(species_index){
     
     out += '<h3>' + species.title + '</h3>';
     out += '<p>' + species.subtitle + '</p>';
-    if(species.score){
-        out += '<span class="ui-li-count">score: ' + species.score + '</span>';
-    }
+
+    species.score = parseInt(species.score) || 0; // check species.score has been initialised
+    out += '<span class="ui-li-count">score: ' + species.score + '</span>';
+
     out += '</a>';
     out += '</li>';
     
@@ -721,6 +664,8 @@ function stateIsOn(state_id){
 function setCurrentState(state_id, on){
         
     var currentStates = getCurrentStates();
+    
+    console.log(polyclave_data.character_tree[0]);
 
     if($.inArray(state_id, currentStates) != -1){
         
@@ -738,6 +683,55 @@ function setCurrentState(state_id, on){
         }
     }
     saveCurrentStates(currentStates);
+    updateSpeciesScores(state_id, on);
+    
+}
+
+function resetSpeciesScores(){
+    for (var species_id in polyclave_data.species) {
+        polyclave_data.species[species_id].score = 0;
+    }
+    polyclave_data.scores_changed = true;
+}
+
+function updateSpeciesScores(state_id, on){
+    
+    // run through the characters, states until we find that 
+    // state then run through the species and either increment
+    // or decrement their scores.
+    character_group_loop:
+    for (var g = 0; g < polyclave_data.character_tree.length; g++) {
+        var group = polyclave_data.character_tree[g];
+        for (var c = 0; c < group.characters.length; c++) {
+            var character = group.characters[c];
+            for (var s = 0; s < character.states.length; s++) {
+                var state = character.states[s];
+                if(state.id == state_id){
+                    for (var sp = 0; sp < state.species.length; sp++) {
+                        var species_id = state.species[sp];
+                        var species = polyclave_data.species['s' + species_id];
+                        
+                        // check species.score has been initialised
+                        species.score = parseInt(species.score) || 0;
+                        
+                        if(on){
+                            species.score++;
+                        }else{
+                            species.score--;
+                        }
+                        
+                        console.log(species.title + ": " + species.score);
+
+                    };
+                    break character_group_loop;
+                }
+            };
+        };
+    };
+    
+    // set a flag to say that the scores have been changed
+    polyclave_data.scores_changed = true;
+    
 }
 
 // get the current filter states
@@ -757,53 +751,25 @@ function saveCurrentStates(states){
     setCookie('polyclave-states', JSON.stringify(states), 365);
 }
     
-    /*
-        * The cookie methods actually uses local storage *
-    */
-    
-    function setCookie(name,value,exdays)
-    {
-        localStorage.setItem(name, value);
-    }
-
-    function getCookie(name){
-        
-        var value = localStorage.getItem(name);
-        if (value == null){
-            value = '';
-        }
-        return value;
-    }
-
-    function deleteCookie(name) {
-        localStorage.removeItem(name);
-    }    
-    
-    /*
-    function setCookie(c_name,value,exdays)
-    {
-    var exdate=new Date();
-    exdate.setDate(exdate.getDate() + exdays);
-    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-    document.cookie=c_name + "=" + c_value;
-    }
-
-    function getCookie(c_name){
-    var i,x,y,ARRcookies=document.cookie.split(";");
-    for (i=0;i<ARRcookies.length;i++)
-    {
-      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
-      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
-      x=x.replace(/^\s+|\s+$/g,"");
-      if (x==c_name)
-        {
-        return unescape(y);
-        }
-      }
-     return '';
-    }
-
-    function deleteCookie(name) {
-        setCookie(name,"",-1);
-    }
+/*
+    * The cookie methods actually uses local storage *
 */
+
+function setCookie(name,value,exdays)
+{
+    localStorage.setItem(name, value);
+}
+
+function getCookie(name){
+    
+    var value = localStorage.getItem(name);
+    if (value == null){
+        value = '';
+    }
+    return value;
+}
+
+function deleteCookie(name) {
+    localStorage.removeItem(name);
+}    
+    
