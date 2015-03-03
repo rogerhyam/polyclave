@@ -31,8 +31,8 @@
     </head> 
 <body> 
     
+<!-- A U D I O -->
 <audio src="data/audio/test.mp3" id="polyclave-audio" ></audio>
-
 
 <!--  H O M E - P A G E  -->
 <div data-role="page" id="index-page">
@@ -94,16 +94,23 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 	<div data-role="header" data-position="fixed">
 	    <a href="#species-page" data-icon="arrow-l" data-direction="reverse"  data-transition="slide">Species</a>
 		<h1>Species Profile</h1>
-		<a href="species_gallery_100.html" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Images</a>
 	</div><!-- /header -->
 
 	<div data-role="content">
-	     <img class="profile-image" />
+	    <!-- <img class="profile-image" /> -->
          <h2 class="profile-title">species-title</h2>
          <p class="profile-subtitle">species-subtitle</p>
          <div class="profile-notes" >profile-note</div>
          
+         <!-- Audio -->
          <button id="polyclave-audio-button" data-playing="false" class="ui-btn ui-icon-audio ui-btn-icon-left ui-corner-all">Play Audio</button>
+                           
+         <!-- images -->
+         <ul data-role="listview" data-inset="true" id="profile-page-thumbs-wrapper" >
+              <li data-role="list-divider">Images</li>
+              <li id="profile-page-thumbs"> </li>
+         </ul>
+       
          <ul data-role="listview" data-inset="true" id="profile-characters" ></ul>
 
          <ul data-role="listview" data-inset="true" style="display:none;">
@@ -111,27 +118,11 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
              <li id="profile-character-template"><h3>Character Name</h3><p>States</p></li>
         </ul>
         
+
+        
 	</div><!-- /content -->
 
 </div><!-- /page -->
-
-<!-- P R O F I L E - G A L L E R Y - P A G E -->
-<div data-role="page" id="species-gallery-100" class="gallery-page">
-
-	<div data-role="header" data-position="fixed" >
-	    <a href="#profile-page?100.html" data-direction="reverse"  data-transition="slide" data-icon="arrow-l">Back</a>
-		<h1>Images</h1>
-	</div><!-- /header -->
-	<div data-role="content">
-        <ul class="gallery">
-         <!-- 
-         <li><a href="images/pagesize/species/100/Photo_546b8cdf9c041.jpg" rel="external"><img src="images/thumbsquared/species/100/Photo_546b8cdf9c041.jpg" alt="Willow Warbler" /></a></li><li><a href="images/pagesize/species/100/Photo_546b8cdfa1eb3.jpg" rel="external"><img src="images/thumbsquared/species/100/Photo_546b8cdfa1eb3.jpg" alt="Willow Warbler" /></a></li><li><a href="images/pagesize/species/100/Photo_546b8cdfa3994.jpg" rel="external"><img src="images/thumbsquared/species/100/Photo_546b8cdfa3994.jpg" alt="Willow Warbler" /></a></li>         
-         -->
-         </ul>
-    </div>
-    
-</div><!-- /page -->
-
 
 <!--  F I L T E R - P A G E  -->
 <div data-role="page" id="filter-page">
@@ -148,6 +139,12 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
             <ul data-role="listview" data-inset="true" id="polyclave-filter-list"></ul>
         </div><!-- primary content -->
     </div><!-- content -->
+    
+    <div data-role="footer" data-position="fixed">
+        <div class="ui-bar" id="polyclave-filter-page-footer">
+            <p></p>
+        </div>
+    </div>
 
 </div><!-- /page -->
 

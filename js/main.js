@@ -2,42 +2,6 @@
 
 var filtersCookieName = 'polyclave_filter_state';
 
-/*
-(function(window, $, PhotoSwipe){
-    
-    $(document).ready(function(){
-        
-        $('div.gallery-page')
-            .live('pageshow', function(e){
-                
-                var 
-                    currentPage = $(e.target),
-                    options = {},
-                    photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options,  currentPage.attr('id'));
-                    
-                return true;
-                
-            })
-            
-            .live('pagehide', function(e){
-                
-                var 
-                    currentPage = $(e.target),
-                    photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
-
-                if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
-                    PhotoSwipe.detatch(photoSwipeInstance);
-                }
-                
-                return true;
-                
-            });
-        
-    });
-
-}(window, window.jQuery, window.Code.PhotoSwipe));
-*/
-
 // this is run with every page loaded - may be cached though?
 $(document).bind('pageinit', function(e, data) {
     console.log("- pageinit -");
@@ -78,7 +42,22 @@ $(document).bind('pageinit', function(e, data) {
      });
      
 
+     // handling photo popups.
+     $( ".photopopup" ).bind({
+         popupbeforeposition: function(e,ui) {
+            //console.log(this);
+             console.log(e.target);
+             console.log(e.currentTarget);
+
+             //var maxHeight = $( window ).height() - 60 + "px";
+              ///   $( ".photopopup img" ).css( "max-height", maxHeight );
+         }
+     });
+
+
 });
+
+
     
 // This is called when moving between pages first with the
 // uri then with the fragment of dom that is about to be displayed.
@@ -174,14 +153,83 @@ function initProfilePage(data){
     
     
     // basic info about the species
+    /*
     if(species.images.length > 0){
         $('#profile-page .profile-image').attr('src','data/images/thumbsquared/species/' + species.id  + '/' +  species.images[0].filename );
     }else{
         $('#profile-page .profile-image').attr('src', null);
     }
+    */
     $('#profile-page .profile-title').html(species.title);
     $('#profile-page .profile-subtitle').html(species.subtitle);
     $('#profile-page .profile-notes').html(species.notes);
+    
+    // add in the images
+    var img_div = $('#profile-page-thumbs');
+    var img_wrapper = $('#profile-page-thumbs-wrapper');
+    
+    // remove any that are already there
+    img_div.find('img').remove();
+    
+    // add in a thumbnail for each
+   
+    if(species.images.length > 0){
+        img_wrapper.show();
+
+        for (var i=0; i < species.images.length; i++) {
+            
+            var img_data = species.images[i];
+            var image_id = 'polyclave-img-' + species.id + '-' + img_data.id;
+            
+            var img = $('<img></img>');
+            img.attr('src', 'data/images/thumbsquared/species/' + species.id  + '/' +  img_data.filename);
+            var img_big = $('<img></img>');
+            img_big.attr('src', 'data/images/pagesize/species/' + species.id  + '/' +  img_data.filename);
+            
+            var a = $('<a></a>');
+            a.attr('href', '#' + image_id);
+            a.attr('data-rel', 'popup');
+            a.attr('data-position-to', 'window');
+            a.append(img);
+           
+            //$( "#myPopupDiv" ).popup( "open" )
+            
+            img_div.append(a);
+    
+            // add a popup for the image
+            var pop_div = $('<div></div>');
+            pop_div.attr("data-role", "popup");
+            pop_div.attr("id", image_id);
+            pop_div.attr("data-overlay-theme", "a");
+            pop_div.attr("data-corners", "false");
+            pop_div.attr("data-tolerance", "30,15");
+            pop_div.bind({
+                 popupbeforeposition: function(e,ui) {
+                     
+                     var maxHeight = $( window ).height() - 15 + "px";
+                     var maxWidth = $( window ).width() - 15 + "px";
+                     
+                     $(e.currentTarget).find('img').css('max-height', maxHeight);
+                     $(e.currentTarget).find('img').css('max-width', maxWidth);
+
+                 }});
+            
+            pop_div.append('<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>');
+            pop_div.append(img_big);
+            
+            img_div.append(pop_div);
+            img_div.trigger('create');
+            
+
+        };
+        
+        img_wrapper.listview("refresh");
+    
+    }else{
+        img_wrapper.hide();
+    }
+    
+    
     
     // add in the characters
     var char_list = $('#profile-characters');
@@ -250,9 +298,8 @@ function initProfilePage(data){
     
 }
 
-    
+  
     function initFilterPage( pageId ){
-
 
         // set up the page for the first time add in the characters
         var char_list = $('#polyclave-filter-list');
@@ -324,6 +371,40 @@ function initProfilePage(data){
 
             }
         
+        }
+        
+        // update the footer display
+        var filter_count = getCurrentStates().length
+        if(filter_count == 0){
+            $('#polyclave-filter-page-footer p').html('Filter is empty');
+        }else{
+            var highest_score = 0;
+            var number_with_highest = 0;
+            
+            for(species_id in polyclave_data.species){
+                var score = polyclave_data.species[species_id].score;
+                
+                if(score > highest_score){
+                    highest_score = score;
+                    number_with_highest = 1;
+                    continue;
+                }
+                
+                if(score == highest_score){
+                    number_with_highest++;
+                    continue;
+                }
+                
+            }
+            
+            if(number_with_highest == 1){
+                $('#polyclave-filter-page-footer p').html(number_with_highest + " species scores " + highest_score + " out of " + filter_count);
+            }else{
+                $('#polyclave-filter-page-footer p').html(number_with_highest + " species score " + highest_score + " out of " + filter_count);
+            }
+            
+
+            
         }
 
     }
