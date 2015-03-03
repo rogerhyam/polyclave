@@ -4,9 +4,9 @@
 xmlns:gap = "http://phonegap.com/ns/1.0"
 id = "com.phonegap.helloworld"
 version = "1.0.0">
-<name>Birds App</name>
+<name>Birds of Peramagroon</name>
 <description>
-This is a test of the birds app
+This is a test application: Birds of Peramagroon.
 </description>
 <author href="http://www.rbge.org.uk" email="r.hyam@rbge.org.uk">Roger Hyam</author>
 <!--
@@ -30,11 +30,13 @@ permission on your app, which PhoneGap requires.
 <preference name="disable-cursor" value="false" /> <!-- blackberry: prevents a mouse-icon/cursor from being displayed on the app -->
 <preference name="android-minSdkVersion" value="7" /> <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
 <preference name="android-installLocation" value="auto" /> <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
+
 <!-- Define a specific version of PhoneGap to build into your app.-->
-<preference name="phonegap-version" value="3.5.0" />
+<!-- <preference name="phonegap-version" value="3.5.0" /> -->
 
 <!-- Plugins -->
 <!-- Core plugins -->
+<!--
 <gap:plugin name="org.apache.cordova.battery-status" />
 <gap:plugin name="org.apache.cordova.camera" />
 <gap:plugin name="org.apache.cordova.media-capture" />
@@ -49,10 +51,13 @@ permission on your app, which PhoneGap requires.
 <gap:plugin name="org.apache.cordova.geolocation" />
 <gap:plugin name="org.apache.cordova.globalization" />
 <gap:plugin name="org.apache.cordova.inappbrowser" />
-<gap:plugin name="org.apache.cordova.media" />
 <gap:plugin name="org.apache.cordova.network-information" />
-<gap:plugin name="org.apache.cordova.splashscreen" />
 <gap:plugin name="org.apache.cordova.vibration" />
+
+-->
+<gap:plugin name="org.apache.cordova.media" />
+<gap:plugin name="org.apache.cordova.splashscreen" />
+
 <!-- Third party plugins -->
 <!-- A list of available plugins are available at https://build.phonegap.com/plugins -->
 <!--

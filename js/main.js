@@ -19,6 +19,17 @@ $(document).bind('pageinit', function(e, data) {
          e.stopImmediatePropagation();
          console.log('audio button pressed');
          
+         var my_media = new Media('data/audio/test.mp3',
+                     // success callback
+                      function () { console.log("playAudio():Audio Success"); },
+                     // error callback
+                      function (err) { console.log("playAudio():Audio Error: " + err); }
+             );
+                    // Play audio
+         my_media.play();
+         
+         /*
+         
          // if it is playing then stop it.
          if($('#polyclave-audio-button').data('playing')){
              console.log('playing so going pausing');
@@ -32,6 +43,8 @@ $(document).bind('pageinit', function(e, data) {
              $('#polyclave-audio-button').data('playing', true);
             
          }
+         
+         */
          
      });
      
@@ -371,40 +384,6 @@ function initProfilePage(data){
 
             }
         
-        }
-        
-        // update the footer display
-        var filter_count = getCurrentStates().length
-        if(filter_count == 0){
-            $('#polyclave-filter-page-footer p').html('Filter is empty');
-        }else{
-            var highest_score = 0;
-            var number_with_highest = 0;
-            
-            for(species_id in polyclave_data.species){
-                var score = polyclave_data.species[species_id].score;
-                
-                if(score > highest_score){
-                    highest_score = score;
-                    number_with_highest = 1;
-                    continue;
-                }
-                
-                if(score == highest_score){
-                    number_with_highest++;
-                    continue;
-                }
-                
-            }
-            
-            if(number_with_highest == 1){
-                $('#polyclave-filter-page-footer p').html(number_with_highest + " species scores " + highest_score + " out of " + filter_count);
-            }else{
-                $('#polyclave-filter-page-footer p').html(number_with_highest + " species score " + highest_score + " out of " + filter_count);
-            }
-            
-
-            
         }
 
     }
