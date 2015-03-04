@@ -4,6 +4,7 @@ var filtersCookieName = 'polyclave_filter_state';
 
 // this is run with every page loaded - may be cached though?
 $(document).bind('pageinit', function(e, data) {
+
     console.log("- pageinit -");
     
     // we need to clear the filter 
@@ -17,6 +18,7 @@ $(document).bind('pageinit', function(e, data) {
      //playing the media
      $('#polyclave-audio-button').on('click', function(e){
          e.stopImmediatePropagation();
+         
          console.log('audio button pressed');
          
          var my_media = new Media('data/audio/test.mp3',
@@ -54,20 +56,6 @@ $(document).bind('pageinit', function(e, data) {
          $('#polyclave-audio-button').data('playing', false);
      });
      
-
-     // handling photo popups.
-     $( ".photopopup" ).bind({
-         popupbeforeposition: function(e,ui) {
-            //console.log(this);
-             console.log(e.target);
-             console.log(e.currentTarget);
-
-             //var maxHeight = $( window ).height() - 60 + "px";
-              ///   $( ".photopopup img" ).css( "max-height", maxHeight );
-         }
-     });
-
-
 });
 
 
@@ -98,9 +86,9 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
         
         // at this point the page has been loaded into the dom and we are
         // about to switch it to visible - change it now if we need to!
-        console.log("- pagebeforechange -");
-        console.log(data.toPage);
-        console.log("about to show " + data.toPage.attr("id"));
+//       console.log("- pagebeforechange -");
+//        console.log(data.toPage);
+//        console.log("about to show " + data.toPage.attr("id"));
      
         // switch statement to call the page update functions...
         switch(data.toPage.attr("id")){
@@ -215,7 +203,7 @@ function initProfilePage(data){
             pop_div.attr("id", image_id);
             pop_div.attr("data-overlay-theme", "a");
             pop_div.attr("data-corners", "false");
-            pop_div.attr("data-tolerance", "30,15");
+            pop_div.attr("data-tolerance", "5,7,5,7");
             pop_div.bind({
                  popupbeforeposition: function(e,ui) {
                      
@@ -307,7 +295,7 @@ function initProfilePage(data){
     
     char_list.listview('refresh');
     
-    console.log(species);
+    //console.log(species);
     
 }
 
@@ -459,7 +447,7 @@ function initProfilePage(data){
     
     function initSpeciesPage( pageId ){
         
-        console.log("initSpeciesPage");
+//        console.log("initSpeciesPage");
         
         //var page = $.mobile.pageContainer.pagecontainer("getActivePage");
         var start_index = 0;
@@ -469,7 +457,7 @@ function initProfilePage(data){
          var species_id = getCookie('species');  
          if(!polyclave_data.scores_changed && typeof species_id != "undefined"){
          
-             console.log("we have a selected species = " + species_id);
+//             console.log("we have a selected species = " + species_id);
              
              // is it already loaded in the document - this is probably the case
              var species_li = $( 'li[data-polyclave-species-id="s'+ species_id +'"]');
@@ -488,7 +476,7 @@ function initProfilePage(data){
                      start_index = polyclave_data.species_order.length - 31;
                  }
 
-                 console.log("start_index = " + start_index);
+//                 console.log("start_index = " + start_index);
                  for(var i = start_index; i < start_index + 30; i++){
                       $("#polyclave-species-list").append(getSpeciesListItem(i));
                   }
@@ -686,7 +674,7 @@ function getSpeciesListItem(species_index){
     var species_id = polyclave_data.species_order[species_index];
     var species = polyclave_data.species[species_id];
     
-    console.log(species);
+//    console.log(species);
     
     var out = '<li data-polyclave-species-index="' + species_index + '"  data-polyclave-species-id="' + species_id + '" >';
     out += '<a href="#profile-page?species=' + species.id + '" data-transition="slide">';
@@ -699,7 +687,7 @@ function getSpeciesListItem(species_index){
     out += '<p>' + species.subtitle + '</p>';
 
     species.score = parseInt(species.score) || 0; // check species.score has been initialised
-    out += '<span class="ui-li-count">score: ' + species.score + '</span>';
+    out += '<span class="ui-li-count">' + species.score + '</span>';
 
     out += '</a>';
     out += '</li>';
