@@ -18,42 +18,12 @@ $(document).bind('pageinit', function(e, data) {
      //playing the media
      $('#polyclave-audio-button').on('click', function(e){
          e.stopImmediatePropagation();
-         
-         console.log('audio button pressed');
-         
-         var my_media = new Media('data/audio/test.mp3',
-                     // success callback
-                      function () { console.log("playAudio():Audio Success"); },
-                     // error callback
-                      function (err) { console.log("playAudio():Audio Error: " + err); }
-             );
-                    // Play audio
-         my_media.play();
-         
-         /*
-         
-         // if it is playing then stop it.
-         if($('#polyclave-audio-button').data('playing')){
-             console.log('playing so going pausing');
-             $('#polyclave-audio')[0].pause();
-             $('#polyclave-audio-button').html('Play Audio');
-             $('#polyclave-audio-button').data('playing', false);
-         }else{
-             console.log('Not playing so going to play');
-             $('#polyclave-audio')[0].play();
-             $('#polyclave-audio-button').html('Stop Audio');
-             $('#polyclave-audio-button').data('playing', true);
-            
-         }
-         
-         */
-         
+         toggleAudio();
      });
      
-     // media finished
+     // media finished playing - only in browser mode
      $('#polyclave-audio').bind('ended', function(){
-         $('#polyclave-audio-button').html('Play Audio');
-         $('#polyclave-audio-button').data('playing', false);
+         audioHasStopped();
      });
      
 });
@@ -114,7 +84,6 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
     
     }
     
-    
 });
 
    // Called after the page has become visible.
@@ -161,6 +130,9 @@ function initProfilePage(data){
         $('#profile-page .profile-image').attr('src', null);
     }
     */
+
+    // FIXME - set the url of the <audio> element.
+
     $('#profile-page .profile-title').html(species.title);
     $('#profile-page .profile-subtitle').html(species.subtitle);
     $('#profile-page .profile-notes').html(species.notes);
@@ -446,8 +418,10 @@ function initProfilePage(data){
     }    
     
     function initSpeciesPage( pageId ){
+        // console.log("initSpeciesPage");
         
-//        console.log("initSpeciesPage");
+        // stop the audio if we set it running on the profile page.
+        stopAudio();
         
         //var page = $.mobile.pageContainer.pagecontainer("getActivePage");
         var start_index = 0;
@@ -513,6 +487,105 @@ function initProfilePage(data){
 
        
     }
+    
+/*
+    return true if result is audio playing
+    otherwise false
+*/
+function toggleAudio(){
+    console.log('toggleAudio');
+    // we take two approaches depending on whether we are 
+    if(window.cordova){
+        return toggleAudioCordova();
+    }else{
+        return toggleAudioBrowser();
+    }
+}
+
+function toggleAudioCordova(){
+    
+    // if we are playing then the object will be there
+    if(polyclave_data.media_player){
+        polyclave_data.media_player.stop();
+        polyclave_data.media_player = false;
+        audioHasStopped();
+    }else{
+        
+        // get the url from the audio object and add in the full path details
+        var media_url = cordova.file.applicationDirectory + 'www/' + $('#polyclave-audio').attr('src');
+        console.log('Playing media from: ' + media_url);
+        
+        // set up the media player
+        polyclave_data.media_player = new Media(media_url,
+            // success callback
+            function () { console.log("playAudio():Audio Success"); },
+            // error callback
+            function (err) {
+              console.log("playAudio():Audio Error: " + err.message);
+              if (err.code == MediaError.MEDIA_ERR_ABORTED) console.log("playAudio():Audio Error: MediaError.MEDIA_ERR_ABORTED");
+              if (err.code == MediaError.MEDIA_ERR_NETWORK) console.log("playAudio():Audio Error: MediaError.MEDIA_ERR_NETWORK");
+              if (err.code == MediaError.MEDIA_ERR_DECODE) console.log("playAudio():Audio Error: MediaError.MEDIA_ERR_DECODE");
+              if (err.code == MediaError.MEDIA_ERR_NONE_SUPPORTED) console.log("playAudio():Audio Error: MediaError.MEDIA_ERR_NONE_SUPPORTED");
+            }
+        );
+        
+        // start it playing
+        polyclave_data.media_player.play();
+        audioHasStarted();
+        
+        // FIXME - monitor when it stops
+        /*
+        if (mediaTimer == null) {
+            mediaTimer = setInterval(function() {
+                // get my_media position
+                my_media.getCurrentPosition(
+                    // success callback
+                    function(position) {
+                        if (position > -1) {
+                            setAudioPosition((position) + " sec");
+                        }
+                    },
+                    // error callback
+                    function(e) {
+                        console.log("Error getting pos=" + e);
+                        setAudioPosition("Error: " + e);
+                    }
+                );
+            }, 1000);
+        }
+        */
+    }
+    
+}
+
+function toggleAudioBrowser(){
+    
+    // if it is playing then stop it.
+    if($('#polyclave-audio').data('playing')){
+      $('#polyclave-audio')[0].pause();
+      $('#polyclave-audio').data('playing', false);
+      audioHasStopped();
+    }else{
+      $('#polyclave-audio')[0].play();
+      $('#polyclave-audio').data('playing', true);
+      audioHasStarted();
+    }
+
+}
+
+function audioHasStarted(){
+    $('#polyclave-audio-button').html('Stop Audio');
+}
+
+function audioHasStopped(){
+    $('#polyclave-audio-button').html('Play Audio');
+}
+
+function stopAudio(){
+    if(polyclave_data.media_player || $('#polyclave-audio').data('playing')){
+        toggleAudio();
+    }
+}
 
 
 /*
