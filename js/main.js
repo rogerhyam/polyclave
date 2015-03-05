@@ -574,11 +574,14 @@ function toggleAudioBrowser(){
 }
 
 function audioHasStarted(){
-    $('#polyclave-audio-button').html('Stop Audio');
+    $('#polyclave-audio-button').html('Stop');
+    $('#polyclave-audio-button').addClass('stop-state');
+    
 }
 
 function audioHasStopped(){
-    $('#polyclave-audio-button').html('Play Audio');
+    $('#polyclave-audio-button').html('Audio');
+    $('#polyclave-audio-button').removeClass('stop-state');    
 }
 
 function stopAudio(){
