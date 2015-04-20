@@ -512,7 +512,15 @@ function toggleAudioCordova(){
     }else{
         
         // get the url from the audio object and add in the full path details
-        var media_url = cordova.file.applicationDirectory + 'www/' + $('#polyclave-audio').attr('src');
+        // var media_url = cordova.file.applicationDirectory + 'www/' + $('#polyclave-audio').attr('src');
+        //media_url = '/android_asset/www/data/audio/test.mp3';
+        
+        // Android - needs different URL
+        var media_url = $('#polyclave-audio').attr('src');
+        if (device.platform == "Android") {
+            media_url = '/android_asset/www/' + media_url;
+        }
+            
         console.log('Playing media from: ' + media_url);
         
         // set up the media player
