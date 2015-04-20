@@ -34,8 +34,9 @@
     </head> 
 <body> 
     
-<!-- A U D I O -->
+<!-- A U D I O 
 <audio src="data/audio/test.mp3" id="polyclave-audio" ></audio>
+-->
 
 <!--  H O M E - P A G E  -->
 <div data-role="page" id="index-page">
@@ -97,7 +98,7 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 	<div data-role="header" data-position="fixed">
 	    <a href="#species-page" data-icon="arrow-l" data-direction="reverse"  data-transition="slide">Species</a>
 		<h1>Species Profile</h1>
-		<a id="polyclave-audio-button" class="ui-btn-right" data-icon="audio" data-iconpos="right">Audio</a>
+		<!-- <a id="polyclave-audio-button" class="ui-btn-right" data-icon="audio" data-iconpos="right">Audio</a> -->
 		
 	</div><!-- /header -->
 
@@ -115,7 +116,7 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
 
          <ul data-role="listview" data-inset="true" style="display:none;">
              <li id="profile-character-group-template" data-role="list-divider">Group heading</li>
-             <li id="profile-character-template"><h3>Character Name</h3><p>States</p></li>
+             <li id="profile-character-template"><h3>Character Name</h3><ul class="profile-states-list" >States</ul></li>
         </ul>
         
 	</div><!-- /content -->
@@ -133,7 +134,7 @@ EN-US;mso-bidi-language:AR-SA">&#9794;</span></span>  - male<br></li></ul>Need t
     
     <div data-role="content">
         <div class="content-primary">
-            <h2>Select as many identifying features as possible from the list below</h2>
+            <p>Select as many identifying features as possible from the list below</p>
             <ul data-role="listview" data-inset="true" id="polyclave-filter-list"></ul>
         </div><!-- primary content -->
     </div><!-- content -->

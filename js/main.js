@@ -121,16 +121,6 @@ function initProfilePage(data){
     var species_id = getCookie('species');
     var species = polyclave_data.species['s'+ species_id];
     
-    
-    // basic info about the species
-    /*
-    if(species.images.length > 0){
-        $('#profile-page .profile-image').attr('src','data/images/thumbsquared/species/' + species.id  + '/' +  species.images[0].filename );
-    }else{
-        $('#profile-page .profile-image').attr('src', null);
-    }
-    */
-
     // FIXME - set the url of the <audio> element.
 
     $('#profile-page .profile-title').html(species.title);
@@ -228,8 +218,8 @@ function initProfilePage(data){
                 var li = $('#profile-character-template').clone();
                 li.find('h3').html(character.title);
                 li.attr('id', 'profile-character-' + character.id);
-                li.find('p').html('');
-                li.find('p').hide();
+                li.find('ul').html('');
+                li.find('ul').hide();
                 char_list.append(li);
                 
             }
@@ -243,20 +233,50 @@ function initProfilePage(data){
         for(var j = 0; j < group.characters.length; j++){
             
             var character = group.characters[j];
-            var lip = $('#profile-character-' + character.id + ' p');
+            var lip = $('#profile-character-' + character.id + ' ul');
             
             // clear out the old ones
             lip.empty();
             
+            /*
+            // run through and put the state images
+            for(var k = 0; k < character.states.length; k++){
+                var state = character.states[k];
+                if(state.filename && $.inArray(state.id, species.scores) > -1){
+                    var img = $('<img></img>');
+                    img.attr('src', 'data/images/thumbsquared/states/' + state.filename);
+                    img.addClass('polyclave-state-image-small');
+                    lip.parent().find('h3').append(img);
+                    console.log(state);
+                }
+            }
+            */
+            
+            // run through and put the state names in 
             var count = 0;
             for(var k = 0; k < character.states.length; k++){
                 var state = character.states[k];
                 
                 if($.inArray(state.id, species.scores) > -1){
-                    if(count > 0 ) lip.append('<span class="polyclave-state-spacer"> | </span>');
-                    lip.append('<span class="polyclave-state">' + state.title + '</span>');
+                    // if(count > 0 ) lip.append('<span class="polyclave-state-spacer"> | </span>');
+                    // lip.append('<span class="polyclave-state">' + state.title + '</span>');
+                    
+                    var li = $('<li></li>');
+                    li.addClass('polyclave-state');
+                    
+                    if(state.filename && $.inArray(state.id, species.scores) > -1){
+                        var img = $('<img></img>');
+                        img.attr('src', 'data/images/thumbsquared/states/' + state.filename);
+                        img.addClass('polyclave-state-image-small');
+                        li.append(img);
+                        console.log(state);
+                    }
+                    
+                    li.append(state.title);
+                    lip.append(li); 
                     count++;
                 }
+                
             }
             
             if(count > 0) lip.show();
@@ -295,7 +315,8 @@ function initProfilePage(data){
                     a.attr('data-transition', 'slide');
                     a.html(character.title);
                     
-                    var p = $('<p></p>');
+                    var p = $('<ul></ul>');
+                    p.addClass('profile-states-list');
                     p.hide();
                     a.append(p);
 
@@ -303,7 +324,6 @@ function initProfilePage(data){
                     li.attr('data-polyclave-filter-character', character.id);
                     li.addClass('polyclave-filter-character');
                     li.append(a);
-                    
                     
                     char_list.append(li);
                     
@@ -322,7 +342,7 @@ function initProfilePage(data){
             for(var j = 0; j < group.characters.length; j++){
                 var character = group.characters[j];
                 
-                var lip = $('#polyclave-filter-list li[data-polyclave-filter-character="' + character.id + '"] p');
+                var lip = $('#polyclave-filter-list li[data-polyclave-filter-character="' + character.id + '"] ul');
                 lip.html('');
 
                 var count = 0;
@@ -330,9 +350,28 @@ function initProfilePage(data){
                     var state = character.states[s];
                     
                     if (stateIsOn(state.id)){
-                        if(count > 0 ) lip.append('<span class="polyclave-state-spacer"> | </span>');
-                        lip.append('<span class="polyclave-state">' + state.title + '</span>');
+                        
+                        
+                        var li = $('<li></li>');
+                        li.addClass('polyclave-state');
+
+                        if(state.filename){
+                            var img = $('<img></img>');
+                            img.attr('src', 'data/images/thumbsquared/states/' + state.filename);
+                            img.addClass('polyclave-state-image-small');
+                            li.append(img);
+                            console.log(state);
+                        }
+
+                        li.append(state.title);
+                        lip.append(li);
+                        
+                        
+                        //if(count > 0 ) lip.append('<span class="polyclave-state-spacer"> | </span>');
+                        //lip.append('<span class="polyclave-state">' + state.title + '</span>');
                         count++;
+                    
+                    
                     }
                 };
 
@@ -366,7 +405,7 @@ function initProfilePage(data){
             }
         }
         
-        console.log(character);
+//        console.log(character);
         
         // build a field set
        
@@ -384,12 +423,21 @@ function initProfilePage(data){
         // write each state into the fieldset
         for (var i=0; i < character.states.length; i++) {
             var state = character.states[i];
+            
             var name_id = 'checkbox_character_' + character.id + '_state_' + state.id;
 
             var label = $('<label></label>');
-            label.html(state.title);
-            console.log(field_set.controlgroup("container"));
-            field_set.controlgroup("container").append(label);
+
+            if(state.filename){
+                var img = $('<img></img>');
+                img.attr('src', 'data/images/thumbsquared/states/' + state.filename);
+                img.addClass('polyclave-state-image');
+                label.append(img);
+                console.log(state);
+            }
+            label.append(state.title);
+            field_set.controlgroup("container").append(label);            
+
             
             var input = $('<input></input>');
             input.attr('type', 'checkbox');
@@ -408,7 +456,7 @@ function initProfilePage(data){
                 var on = e.currentTarget.checked;
                 setCurrentState(state_id, on);                                
             });
-
+            
             label.append(input);
 
         };
@@ -421,7 +469,7 @@ function initProfilePage(data){
         // console.log("initSpeciesPage");
         
         // stop the audio if we set it running on the profile page.
-        stopAudio();
+        // stopAudio();
         
         //var page = $.mobile.pageContainer.pagecontainer("getActivePage");
         var start_index = 0;
@@ -492,6 +540,7 @@ function initProfilePage(data){
     return true if result is audio playing
     otherwise false
 */
+/*
 function toggleAudio(){
     console.log('toggleAudio');
     // we take two approaches depending on whether we are 
@@ -501,7 +550,9 @@ function toggleAudio(){
         return toggleAudioBrowser();
     }
 }
+*/
 
+/*
 function toggleAudioCordova(){
     
     // if we are playing then the object will be there
@@ -542,30 +593,13 @@ function toggleAudioCordova(){
         audioHasStarted();
         
         // FIXME - monitor when it stops
-        /*
-        if (mediaTimer == null) {
-            mediaTimer = setInterval(function() {
-                // get my_media position
-                my_media.getCurrentPosition(
-                    // success callback
-                    function(position) {
-                        if (position > -1) {
-                            setAudioPosition((position) + " sec");
-                        }
-                    },
-                    // error callback
-                    function(e) {
-                        console.log("Error getting pos=" + e);
-                        setAudioPosition("Error: " + e);
-                    }
-                );
-            }, 1000);
-        }
-        */
+
     }
     
 }
+*/
 
+/*
 function toggleAudioBrowser(){
     
     // if it is playing then stop it.
@@ -597,6 +631,7 @@ function stopAudio(){
         toggleAudio();
     }
 }
+*/
 
 
 /*

@@ -6,7 +6,7 @@ id = "com.phonegap.helloworld"
 version = "1.0.0">
 <name>Birds of Peramagroon</name>
 <description>
-This is a test application: Birds of Peramagroon.
+Birds of Peramagroon.
 </description>
 <author href="http://www.rbge.org.uk" email="r.hyam@rbge.org.uk">Roger Hyam</author>
 <!--

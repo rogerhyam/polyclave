@@ -1,5 +1,5 @@
 
-This is the documentation about this thing
+This is the documentation about this thingie
 
 Cordova Plugins Needed
 ======================

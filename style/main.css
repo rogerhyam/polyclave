@@ -57,3 +57,39 @@ ul#profile-characters{
 #polyclave-audio-button.stop-state:after {
   background-color: red;
 }
+
+.polyclave-state-image{
+    height: 60px;
+    vertical-align:middle;
+    margin-top: -9px;
+    margin-bottom: -9px;
+    margin-right: 1em;
+    border: solid 1px gray;
+}
+
+.profile-states-list{
+    list-style-type: none;
+    padding-left: 0.5em;
+}
+
+.profile-states-list{
+    font-weight: normal;
+}
+
+.profile-states-list .polyclave-state-image-small{
+    height: 60px;
+    vertical-align:middle;
+    margin-right: 0.5em;
+    margin-bottom: 0.1em;
+    border: solid 1px gray;   
+}
+
+
+
+/*
+fieldset.ui-controlgroup div.ui-controlgroup-controls div.ui-checkbox label.ui-btn{
+    
+    vertical-align: middle;
+    color: red;
+}
+*/
