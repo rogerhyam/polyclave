@@ -69,7 +69,7 @@ ul#profile-characters{
 
 .profile-states-list{
     list-style-type: none;
-    padding-left: 0.5em;
+    padding-left: 0em;
 }
 
 .profile-states-list{
@@ -84,7 +84,65 @@ ul#profile-characters{
     border: solid 1px gray;   
 }
 
+img.polyclave-about-logo{
+    width: 100%;
+    max-width: 300px;
+     box-shadow: 2px 2px 7px #888888;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 
+#birds-of-the-middle-east{
+   width: 80%;
+   max-width: 420px;
+   display: block;
+   margin-left: auto;
+   margin-right: auto;
+   box-shadow: 2px 2px 7px #888888;
+   
+}
+
+#index-page div.ui-content,
+#about-page div.ui-content{
+    padding: 0px;
+    text-align: justify;
+}
+
+#index-page div.ui-content h2,
+#index-page div.ui-content h3,
+#index-page div.ui-content p,
+#about-page div.ui-content h2,
+#about-page div.ui-content h3,
+#about-page div.ui-content p
+{
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+#index-page div.ui-content ul,
+#index-page div.ui-content ol{
+   margin-right: 16px;
+}
+
+
+#index-page img.polyclave-banner,
+#about-page img.polyclave-banner{
+    max-width: 100%;
+}
+
+img.polyclave-banner{
+    width: 100%;
+    
+}
+
+div#index-page{
+   
+}
+
+div#index-page div[data-role="content"]{
+    
+}
 
 /*
 fieldset.ui-controlgroup div.ui-controlgroup-controls div.ui-checkbox label.ui-btn{

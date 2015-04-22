@@ -111,8 +111,8 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
     Init the about page - may not do anything
 */
 function initAboutPage(){
-    console.log('initAboutPage');
-    $('#about-page-subtitle').html( polyclave_data.created );
+    // console.log('initAboutPage');
+    // $('#about-page-subtitle').html( polyclave_data.created );
 }
 
 function initProfilePage(data){
