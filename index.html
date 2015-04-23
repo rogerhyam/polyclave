@@ -7,11 +7,11 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
        
+       
+        <link rel="stylesheet" href="style/themes/botanics_mobile.min.css" />
+    	<link rel="stylesheet" href="style/themes/jquery.mobile.icons.min.css" />
+    	
         <link rel="stylesheet" href="js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        
-        <!-- Photoswipe CSS -->
-        <link rel="stylesheet" href="style/photoswipe.css" type="text/css" >
-        <link rel="stylesheet" href="style/photoswipe-jquery-mobile.css" type="text/css">
         
         <!-- Application CSS -->
         <link rel="stylesheet" href="style/main.css" type="text/css" charset="utf-8">
@@ -32,16 +32,16 @@
         <script src="js/main.js" type="text/javascript"></script>
         
     </head> 
-<body> 
+<body > 
     
 <!-- A U D I O 
 <audio src="data/audio/test.mp3" id="polyclave-audio" ></audio>
 -->
 
 <!--  H O M E - P A G E  -->
-<div data-role="page" id="index-page">
+<div data-role="page" id="index-page" >
 
-	<div data-role="header" data-position="fixed" >
+	<div data-role="header" data-position="fixed" data-theme="c" >
 	    <a href="#about-page?banana=99" data-transition="slide" data-direction="reverse" data-icon="arrow-l" >About</a>
 		<h1>Home Page</h1>
 		<a href="#species-page" data-transition="slide" data-icon="arrow-r" data-iconpos="right" >Species</a>
@@ -85,7 +85,7 @@
 <!-- A B O U T - P A G E -->
 <div data-role="page" id="about-page" >
 
-	<div data-role="header" data-position="fixed" >
+	<div data-role="header" data-position="fixed" data-theme="c" >
 		<h1>About</h1>
 		<a href="#index-page" class="ui-btn-right" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Home</a>
 	</div><!-- /header -->
@@ -124,9 +124,9 @@
 
 
 <!-- S P E C I E S - L I S T - P A G E -->
-<div data-role="page" id="species-page">
+<div data-role="page" id="species-page"  >
 
-	<div data-role="header" data-position="fixed" >
+	<div data-role="header" data-position="fixed" data-theme="c" >
 	    <a href="index.html" data-direction="reverse"  data-transition="slide" data-icon="arrow-l">Home</a>
 		<h1>Species</h1>
 		<a href="#filter-page" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Filter</a>
@@ -139,9 +139,9 @@
 </div><!-- /page -->
 
 <!--  P R O F I L E - P A G E  -->
-<div data-role="page" id="profile-page">
+<div data-role="page" id="profile-page"  >
 
-	<div data-role="header" data-position="fixed">
+	<div data-role="header" data-position="fixed" data-theme="c">
 	    <a href="#species-page" data-icon="arrow-l" data-direction="reverse"  data-transition="slide">Species</a>
 		<h1>Species Profile</h1>
 		<!-- <a id="polyclave-audio-button" class="ui-btn-right" data-icon="audio" data-iconpos="right">Audio</a> -->
@@ -170,16 +170,16 @@
 </div><!-- /page -->
 
 <!--  F I L T E R - P A G E  -->
-<div data-role="page" id="filter-page">
+<div data-role="page" id="filter-page" >
 
-    <div data-role="header" data-position="fixed">
+    <div data-role="header" data-position="fixed" data-theme="c">
         <a href="#species-page" data-direction="reverse" data-transition="slide" data-icon="arrow-l" data-iconpos="left">Species</a>
         <h1>Filter</h1>
         <a href="" data-transition="slide" id="filter-clear-button" >Clear</a>
     </div>
     
     <div data-role="content">
-        <div class="content-primary">
+        <div class="content-primary" >
             <p>Select as many identifying features as possible from the list below.</p>
             <ul data-role="listview" data-inset="true" id="polyclave-filter-list"></ul>
         </div><!-- primary content -->
@@ -188,12 +188,11 @@
 </div><!-- /page -->
 
 <!-- S C O R E - P A G E -->
-<div data-role="page" id="score-page">
+<div data-role="page" id="score-page" >
 
-	<div data-role="header">
+	<div data-role="header" data-theme="c">
 	    <a href="#filter-page" data-direction="reverse" data-transition="slide" data-icon="arrow-l">Done</a>
 		<h1>Score</h1>
-		<a href="#character-help-page" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Help</a>
 	</div><!-- /header -->
 
 	<div data-role="content" >
