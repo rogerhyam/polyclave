@@ -5,8 +5,6 @@ var filtersCookieName = 'polyclave_filter_state';
 // this is run with every page loaded - may be cached though?
 $(document).bind('pageinit', function(e, data) {
 
-    console.log("- pageinit -");
-    
     // we need to clear the filter 
     $('#filter-clear-button').click(function(){
          e.stopImmediatePropagation();
@@ -56,10 +54,6 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
         
         // at this point the page has been loaded into the dom and we are
         // about to switch it to visible - change it now if we need to!
-//       console.log("- pagebeforechange -");
-//        console.log(data.toPage);
-//        console.log("about to show " + data.toPage.attr("id"));
-     
         // switch statement to call the page update functions...
         switch(data.toPage.attr("id")){
             case 'about-page':
@@ -78,7 +72,7 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
                 initScorePage();
                 break;
             default:
-                console.log("No init method for " + data.toPage.attr("id"));
+//                console.log("No init method for " + data.toPage.attr("id"));
         }
         
     
@@ -100,7 +94,7 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
                 $("html, body").animate({ "scrollTop" : polyclave_data.species_last_scroll }, 500);
                 break;
             default:
-                console.log("No pagechange method for " + data.toPage.attr("id"));
+//                console.log("No pagechange method for " + data.toPage.attr("id"));
             
         }
         
@@ -111,12 +105,10 @@ $(document).bind( "pagecontainerbeforechange", function( e, data ) {
     Init the about page - may not do anything
 */
 function initAboutPage(){
-    // console.log('initAboutPage');
     // $('#about-page-subtitle').html( polyclave_data.created );
 }
 
 function initProfilePage(data){
-    console.log('initProfilePage: ' + getCookie('species'));
     
     var species_id = getCookie('species');
     var species = polyclave_data.species['s'+ species_id];
@@ -238,28 +230,12 @@ function initProfilePage(data){
             // clear out the old ones
             lip.empty();
             
-            /*
-            // run through and put the state images
-            for(var k = 0; k < character.states.length; k++){
-                var state = character.states[k];
-                if(state.filename && $.inArray(state.id, species.scores) > -1){
-                    var img = $('<img></img>');
-                    img.attr('src', 'data/images/thumbsquared/states/' + state.filename);
-                    img.addClass('polyclave-state-image-small');
-                    lip.parent().find('h3').append(img);
-                    console.log(state);
-                }
-            }
-            */
-            
             // run through and put the state names in 
             var count = 0;
             for(var k = 0; k < character.states.length; k++){
                 var state = character.states[k];
                 
                 if($.inArray(state.id, species.scores) > -1){
-                    // if(count > 0 ) lip.append('<span class="polyclave-state-spacer"> | </span>');
-                    // lip.append('<span class="polyclave-state">' + state.title + '</span>');
                     
                     var li = $('<li></li>');
                     li.addClass('polyclave-state');
@@ -269,7 +245,6 @@ function initProfilePage(data){
                         img.attr('src', 'data/images/thumbsquared/states/' + state.filename);
                         img.addClass('polyclave-state-image-small');
                         li.append(img);
-                        console.log(state);
                     }
                     
                     li.append(state.title);
@@ -286,8 +261,6 @@ function initProfilePage(data){
     }
     
     char_list.listview('refresh');
-    
-    //console.log(species);
     
 }
 
@@ -360,17 +333,12 @@ function initProfilePage(data){
                             img.attr('src', 'data/images/thumbsquared/states/' + state.filename);
                             img.addClass('polyclave-state-image-small');
                             li.append(img);
-                            console.log(state);
                         }
 
                         li.append(state.title);
                         lip.append(li);
                         
-                        
-                        //if(count > 0 ) lip.append('<span class="polyclave-state-spacer"> | </span>');
-                        //lip.append('<span class="polyclave-state">' + state.title + '</span>');
                         count++;
-                    
                     
                     }
                 };
@@ -388,9 +356,7 @@ function initProfilePage(data){
     }
     
     function initScorePage(){
-        
-        console.log('initScorePage: ' + getCookie('character'));        
-        
+                
         // get the character by id
         var char_id = getCookie('character');
         var character = null;
@@ -405,10 +371,7 @@ function initProfilePage(data){
             }
         }
         
-//        console.log(character);
-        
-        // build a field set
-       
+        // build a field set       
         var field_set = $('#score-page fieldset');
         
         // remove the old ones
@@ -433,7 +396,6 @@ function initProfilePage(data){
                 img.attr('src', 'data/images/thumbsquared/states/' + state.filename);
                 img.addClass('polyclave-state-image');
                 label.append(img);
-                console.log(state);
             }
             label.append(state.title);
             field_set.controlgroup("container").append(label);            
@@ -466,7 +428,6 @@ function initProfilePage(data){
     }    
     
     function initSpeciesPage( pageId ){
-        // console.log("initSpeciesPage");
         
         // stop the audio if we set it running on the profile page.
         // stopAudio();
@@ -477,10 +438,8 @@ function initProfilePage(data){
          // if there is a current species set and haven't just updated the
          // scores then display the last species if possible
          var species_id = getCookie('species');  
-         if(!polyclave_data.scores_changed && typeof species_id != "undefined"){
-         
-//             console.log("we have a selected species = " + species_id);
-             
+         if(!polyclave_data.scores_changed && typeof species_id != "undefined" && species_id){
+                      
              // is it already loaded in the document - this is probably the case
              var species_li = $( 'li[data-polyclave-species-id="s'+ species_id +'"]');
              if(species_li.length == 0){
@@ -492,13 +451,15 @@ function initProfilePage(data){
                          start_index = i;
                      }
                  }
-
+                 
                  // if we are beyond the end of the list the back up a bit
                  if(polyclave_data.species_order.length - (start_index +1) < 30){
                      start_index = polyclave_data.species_order.length - 31;
                  }
 
-//                 console.log("start_index = " + start_index);
+                 // but don't go back too far
+                 if (start_index < 0 ) start_index = 0;
+
                  for(var i = start_index; i < start_index + 30; i++){
                       $("#polyclave-species-list").append(getSpeciesListItem(i));
                   }
@@ -513,7 +474,6 @@ function initProfilePage(data){
          }else{
              //  we have no current species or the scores have changed
              // so just load the first 30 species - will stop automatically if not it runs off the end
-             console.log("loading first thirty");
               
               // remove the existing ones
               $('#polyclave-species-list li').remove();
@@ -640,10 +600,6 @@ function stopAudio(){
 
 function sortSpeciesList(){
 
-    console.log('sortSpeciesList');
-
-    console.log(polyclave_data.species_order);
-
     polyclave_data.species_order.sort(function(a, b){       
         var species_a = polyclave_data.species[a];
         var species_b = polyclave_data.species[b];
@@ -662,8 +618,6 @@ function sortSpeciesList(){
     
     });
     
-    console.log(polyclave_data.species_order);
-
     // flag that list is now in sync with scores
     polyclave_data.scores_changed = false;
 
@@ -792,9 +746,7 @@ function getSpeciesListItem(species_index){
     // get the species
     var species_id = polyclave_data.species_order[species_index];
     var species = polyclave_data.species[species_id];
-    
-//    console.log(species);
-    
+        
     var out = '<li data-polyclave-species-index="' + species_index + '"  data-polyclave-species-id="' + species_id + '" >';
     out += '<a href="#profile-page?species=' + species.id + '" data-transition="slide">';
         
@@ -832,8 +784,6 @@ function setCurrentState(state_id, on){
         
     var currentStates = getCurrentStates();
     
-    console.log(polyclave_data.character_tree[0]);
-
     if($.inArray(state_id, currentStates) != -1){
         
         // if it is in the array and shouldn't be
@@ -887,8 +837,6 @@ function updateSpeciesScores(state_id, on){
                             species.score--;
                         }
                         
-                        console.log(species.title + ": " + species.score);
-
                     };
                     break character_group_loop;
                 }
