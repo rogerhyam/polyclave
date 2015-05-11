@@ -277,7 +277,7 @@ function initProfilePage(data){
             for(var i = 0; i < polyclave_data.character_tree.length; i++){
                 var group = polyclave_data.character_tree[i];
                 
-                char_list.append('<li data-role="list-divider" >'+  group.title  +'</li>');
+                char_list.append('<li data-theme="b" data-role="list-divider" >'+  group.title  +'</li>');
 
                 // characters for this group
                 for(var j = 0; j < group.characters.length; j++){

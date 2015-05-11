@@ -6,26 +6,20 @@
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-       
-       
-        <link rel="stylesheet" href="style/themes/botanics_mobile.min.css" />
-    	<link rel="stylesheet" href="style/themes/jquery.mobile.icons.min.css" />
-    	
-        <link rel="stylesheet" href="js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
         
+        <link rel="stylesheet" href="style/themes/polyclave.css" type="text/css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="style/themes/jquery.mobile.icons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="js/jquery.mobile-1.4.5/jquery.mobile.structure-1.4.5.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    
         <!-- Application CSS -->
         <link rel="stylesheet" href="style/main.css" type="text/css" charset="utf-8">
          
-        <!-- Phone Gap -->
+        <!-- Cordova Gap -->
         <script type="text/javascript" src="cordova.js"></script>
         
         <!-- JQuery Stuff -->
         <script src="js/jquery-2.1.3.min.js" type="text/javascript" charset="utf-8"></script>        
         <script src="js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js" type="text/javascript" charset="utf-8"></script>
-        
-        <!-- Photoswipe javascript -->
-        <script src="js/klass.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="js/code.photoswipe.jquery-3.0.4.js" type="text/javascript" charset="utf-8"></script>
         
         <!-- Application javascript -->
         <script src="data/data.js" type="text/javascript" charset="utf-8"></script>
@@ -39,15 +33,15 @@
 -->
 
 <!--  H O M E - P A G E  -->
-<div data-role="page" id="index-page" >
+<div data-role="page" id="index-page" data-theme="b">
 
-	<div data-role="header" data-position="fixed" data-theme="c" >
+	<div data-role="header" data-position="fixed"  >
 	    <a href="#about-page?banana=99" data-transition="slide" data-direction="reverse" data-icon="arrow-l" >About</a>
 		<h1>Home Page</h1>
 		<a href="#species-page" data-transition="slide" data-icon="arrow-r" data-iconpos="right" >Species</a>
 	</div><!-- /header -->
 
-	<div data-role="content">
+	<div data-role="content" data-theme="c">
 	    
 	    <img class="polyclave-banner" src="logos/banner.jpg"/>	
         
@@ -55,18 +49,27 @@
         
         <p>This guide contains information on the 133 species known from Peramagroon Mountain. It is intended as an easy and quick way to identify birds found here.</p>
         
-        <p>The Birds of the Middle East book should be consulted for more detailed information on these species or for further help with difficult identifications. Tap the image below to purchase a copy of the book.</p>
+        <p><a href="http://www.bloomsbury.com/uk/birds-of-the-middle-east-9781408181225/" target="_system" ><img id="birds-of-the-middle-east" src="logos/birds_of_the_middle_east.jpg" /></a>The Birds of the Middle East book should be consulted for more detailed information on these species or for further help with difficult identifications. Tap the image below to purchase a copy of the book.</p>
         
-        <a href="http://www.bloomsbury.com/uk/birds-of-the-middle-east-9781408181225/" target="_system" ><img id="birds-of-the-middle-east" src="logos/birds_of_the_middle_east.jpg" /></a>
         
-        <p>Many of the same birds will be found in similar habitats nearby. This app can therefore be used in other places – but with care.</p>
+        
+        <p>The enhanced eBook of Birds of the Middle East is available for 
+            
+            Android from the  <a href="#" onclick="var ref = window.open('https://play.google.com/store/apps/details?id=com.coolideas.eproducts.birdsofmiddleeast' , '_system');" >Google Play Store</a>
+            
+            and for iOS devices <a href="#" onclick="var ref = window.open('https://itunes.apple.com/gb/app/eguide-to-birds-middle-east/id542597722?mt=8', '_system');">from iTunes Store</a>   
+        
+        <p>Many of the same birds will be found in similar habitats nearby. This app can therefore be used in other places but with care.</p>
         
         
         <h3>How to use:</h3>
         <ol>
-            <li>Navigate between screens using the buttons at the top left and right of the screen.</li>
-            <li>Tap a bird in the list to see a description.</li>
-            <li>Set a filter to order the species list by relevance.</li>
+            <li>Navigate between screens using the buttons at the top left and top right of the screen.</li>
+            <li>On the <strong>Species</strong> screen tap a bird in the list to see its description.</li>
+            <li>Set a <strong>Filter</strong> to change the order of the species list. Birds that match the filter most closely will come first.</li>
+            <li>The numbers on the species list are their filter score.</li>
+            <li>Tap <strong>Clear</strong> to empty the filter and reset the order.</li>
+            
         </ol>
         
         <h3>Abbreviations:</h3>
@@ -83,14 +86,14 @@
 
 
 <!-- A B O U T - P A G E -->
-<div data-role="page" id="about-page" >
+<div data-role="page" id="about-page" data-theme="b">
 
-	<div data-role="header" data-position="fixed" data-theme="c" >
+	<div data-role="header" data-position="fixed" >
 		<h1>About</h1>
 		<a href="#index-page" class="ui-btn-right" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Home</a>
 	</div><!-- /header -->
 
-	<div data-role="content">
+	<div data-role="content" data-theme="c" >
 
         <img class="polyclave-banner" src="logos/banner.jpg"/>	    
 	    
@@ -98,7 +101,7 @@
 	    
 	    <p>This app was created as part of a UK Government Darwin Initiative project.</p>	
 	    
-	    <a href="#" onclick="var ref = window.open('http://www.natureiraq.org/', '_system');" target="_blank"><img class="polyclave-about-logo" src="logos/ni.jpg"/></a>
+	    <a href="#" onclick="var ref = window.open('http://www.natureiraq.org/', '_system');" ><img class="polyclave-about-logo" src="logos/ni.jpg"/></a>
 	    <br/>
 	    <a href="#" onclick="var ref = window.open('http://www.birdlife.org/', '_system');" ><img class="polyclave-about-logo" src="logos/birdlife.jpg"/></a>
 	     <br/>
@@ -114,9 +117,11 @@
         
         <p>We would like to know what you think.</p>
         
-        <p>For technical feedback and support please email <a href="mailto:r.hyam@rbge.org.uk">Roger Hyam</a> at the Royal Botanic Garden Edinburgh.</p>
+        <p>For enquiries about CMEP email <a href="mailto:cmep@rbge.org.uk?subject=Peramagroon bird app">CMEP enquiries</a> at the Royal Botanic Garden Edinburgh.</p>
         
-        <p>For enquiries about CMEP email <a href="mailto:r.hyam@rbge.org.uk">CMEP enquiries</a> at the Royal Botanic Garden Edinburgh.</p>
+        <p>For technical feedback and support please email <a href="mailto:r.hyam@rbge.org.uk?subject=Birds of Peramagroon: Technical Query">Roger Hyam</a> at the Royal Botanic Garden Edinburgh.</p>
+        
+       
         
 	</div><!-- /content -->
 
@@ -124,41 +129,41 @@
 
 
 <!-- S P E C I E S - L I S T - P A G E -->
-<div data-role="page" id="species-page"  >
+<div data-role="page" id="species-page" data-theme="b" >
 
-	<div data-role="header" data-position="fixed" data-theme="c" >
+	<div data-role="header" data-position="fixed" >
 	    <a href="index.html" data-direction="reverse"  data-transition="slide" data-icon="arrow-l">Home</a>
 		<h1>Species</h1>
 		<a href="#filter-page" data-transition="slide" data-icon="arrow-r" data-iconpos="right">Filter</a>
 	</div><!-- /header -->
 
-    <div data-role="content">	
+    <div data-role="content" data-theme="c">	
         <ul data-role="listview" id="polyclave-species-list"></ul>
     </div><!-- /content -->
     
 </div><!-- /page -->
 
 <!--  P R O F I L E - P A G E  -->
-<div data-role="page" id="profile-page"  >
+<div data-role="page" id="profile-page"  data-theme="b">
 
-	<div data-role="header" data-position="fixed" data-theme="c">
+	<div data-role="header" data-position="fixed" >
 	    <a href="#species-page" data-icon="arrow-l" data-direction="reverse"  data-transition="slide">Species</a>
 		<h1>Species Profile</h1>
 		<!-- <a id="polyclave-audio-button" class="ui-btn-right" data-icon="audio" data-iconpos="right">Audio</a> -->
 		
 	</div><!-- /header -->
 
-	<div data-role="content">
+	<div data-role="content" data-theme="c">
          <h2 class="profile-title">species-title</h2>
          <p class="profile-subtitle">species-subtitle</p>
          <div class="profile-notes" >profile-note</div>
          <!-- images -->
-         <ul data-role="listview" data-inset="true" id="profile-page-thumbs-wrapper" >
+         <ul data-theme="b" data-role="listview" data-inset="true" id="profile-page-thumbs-wrapper" >
             <!-- <li data-role="list-divider">Images</li> -->
               <li id="profile-page-thumbs"> </li>
          </ul>
        
-         <ul data-role="listview" data-inset="true" id="profile-characters" ></ul>
+         <ul data-theme="b" data-role="listview" data-inset="true" id="profile-characters" ></ul>
 
          <ul data-role="listview" data-inset="true" style="display:none;">
              <li id="profile-character-group-template" data-role="list-divider">Group heading</li>
@@ -170,32 +175,29 @@
 </div><!-- /page -->
 
 <!--  F I L T E R - P A G E  -->
-<div data-role="page" id="filter-page" >
+<div data-role="page" id="filter-page" data-theme="b">
 
-    <div data-role="header" data-position="fixed" data-theme="c">
+    <div data-role="header" data-position="fixed" >
         <a href="#species-page" data-direction="reverse" data-transition="slide" data-icon="arrow-l" data-iconpos="left">Species</a>
         <h1>Filter</h1>
         <a href="" data-transition="slide" id="filter-clear-button" >Clear</a>
     </div>
-    
-    <div data-role="content">
-        <div class="content-primary" >
+    <div data-role="content" data-theme="c">
             <p>Select as many identifying features as possible from the list below.</p>
             <ul data-role="listview" data-inset="true" id="polyclave-filter-list"></ul>
-        </div><!-- primary content -->
     </div><!-- content -->
 
 </div><!-- /page -->
 
 <!-- S C O R E - P A G E -->
-<div data-role="page" id="score-page" >
+<div data-role="page" id="score-page" data-theme="b" >
 
-	<div data-role="header" data-theme="c">
+	<div data-role="header" >
 	    <a href="#filter-page" data-direction="reverse" data-transition="slide" data-icon="arrow-l">Done</a>
 		<h1>Score</h1>
 	</div><!-- /header -->
 
-	<div data-role="content" >
+	<div data-role="content" data-theme="c" >
 	    <form>
             <fieldset data-role="controlgroup"></fieldset>
 	    </form>

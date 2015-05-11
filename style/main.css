@@ -87,19 +87,22 @@ ul#profile-characters{
 img.polyclave-about-logo{
     width: 100%;
     max-width: 300px;
-     box-shadow: 2px 2px 7px #888888;
+     box-shadow: 2px 2px 7px #666666;
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
 
 #birds-of-the-middle-east{
-   width: 80%;
-   max-width: 420px;
+   width: 33%;
+   max-width: 320px;
    display: block;
-   margin-left: auto;
-   margin-right: auto;
-   box-shadow: 2px 2px 7px #888888;
+   float: right;
+   margin-left: 1em;
+   margin-top: 0.25em;
+   margin-bottom: 0.25em;
+
+   box-shadow: 2px 2px 7px #666666;
    
 }
 
@@ -142,6 +145,10 @@ div#index-page{
 
 div#index-page div[data-role="content"]{
     
+}
+
+.ui-btn-icon-left:after, .ui-btn-icon-right:after, .ui-btn-icon-top:after, .ui-btn-icon-bottom:after, .ui-btn-icon-notext:after{
+  background-color: #6a734e;
 }
 
 /*
