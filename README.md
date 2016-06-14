@@ -8,6 +8,14 @@ org.apache.cordova.inappbrowser 0.6.0 "InAppBrowser"
 org.apache.cordova.splashscreen 1.0.0 "Splashscreen"
 org.apache.cordova.statusbar 0.1.10 "StatusBar"
 
+
+cordova-plugin-splashscreen
+cordova-plugin-inappbrowser
+
+
+
+
+
 Setting up the icons and splash screens
 =======================================
 
